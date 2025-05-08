@@ -23,9 +23,6 @@ import com.doctor.service.IAppointmentService;
 @RestController
 public class AppointmentController {
 
-    private final Doctor doctor;
-
-
 		
 	@Autowired
 	private IAppointmentService appointmentService;
@@ -33,10 +30,7 @@ public class AppointmentController {
 	@Autowired
 	private DoctorRepo doctorRepo;
 
-    AppointmentController(Doctor doctor) {
-        this.doctor = doctor;
-    }
-    	
+    
 //	@PostMapping("/appointment/{doctorId}")
 //	public Appointment appointment(@RequestParam String remarks ,@RequestParam String date, @PathVariable int doctorId) {
 //		
