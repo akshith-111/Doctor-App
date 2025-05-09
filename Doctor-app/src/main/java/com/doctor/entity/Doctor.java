@@ -34,6 +34,7 @@ import lombok.NoArgsConstructor;
 		  property = "doctorId")
 public class Doctor implements Serializable {
 
+	
 	/**
 	 * 
 	 */

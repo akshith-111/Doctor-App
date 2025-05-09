@@ -21,7 +21,6 @@ import com.doctor.repo.PatientRepo;
 @Service
 public class AppointmentServiceImpl implements IAppointmentService {
 
-    private final UserRepo userRepo;
 
 	@Autowired
 	AppointmentRepo appointmentRepo;
@@ -32,9 +31,6 @@ public class AppointmentServiceImpl implements IAppointmentService {
 	@Autowired
 	private PatientRepo patientRepo;
 
-    AppointmentServiceImpl(UserRepo userRepo) {
-        this.userRepo = userRepo;
-    }
 
 //	@Autowired
 	//private Appointment appointment;

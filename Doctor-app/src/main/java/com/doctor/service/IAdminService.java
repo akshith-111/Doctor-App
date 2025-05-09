@@ -9,5 +9,9 @@ import com.doctor.entity.Admin;
 public interface IAdminService {
 
 	public Admin saveAdmin(Admin admin);
+	public Admin udpateAdmin(Admin admin);
+	public Admin removeAdmin(Admin admin);
+	public Admin viewAdmin(Admin admin);
+	
 	
 }
