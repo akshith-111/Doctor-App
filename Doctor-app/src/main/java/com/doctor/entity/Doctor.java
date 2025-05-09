@@ -29,9 +29,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Component
-//@JsonIdentityInfo(
-//		  generator = ObjectIdGenerators.PropertyGenerator.class, 
-//		  property = "doctorId")
+@JsonIdentityInfo(
+		  generator = ObjectIdGenerators.PropertyGenerator.class, 
+		  property = "doctorId")
 public class Doctor implements Serializable {
 
 	/**
@@ -48,14 +48,15 @@ public class Doctor implements Serializable {
 	private String email;
 	private String password;
 	private String chargedPerVisit;
-	@OneToMany(mappedBy = "doctor",fetch = FetchType.EAGER,cascade = { CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REMOVE})
-	@JsonBackReference(value="appointments")
+	
+	@OneToMany(mappedBy = "doctor",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+//	@JsonBackReference(value="appointments")
 	private List<Appointment> appointments;
-	@OneToOne(mappedBy = "doctor",fetch = FetchType.EAGER,cascade = {CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REMOVE})
-	@JsonBackReference(value="feedback")
+	
+	@OneToOne(mappedBy = "doctor",fetch = FetchType.EAGER,cascade =CascadeType.ALL)
 	private Feedback feedback;
-	@OneToOne(mappedBy = "doctor",fetch = FetchType.EAGER,cascade = { CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REMOVE})
-	@JsonManagedReference
+	
+	@OneToOne(mappedBy = "doctor",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	private AvailabilityDates availabilityDates;
 
 	

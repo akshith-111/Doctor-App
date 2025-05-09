@@ -20,10 +20,10 @@ public class Feedback {
 	private int feedbackId;
 	private String rating;
 	@OneToOne
-	@JsonManagedReference
+	@JsonBackReference("patient")
 	private Patient patient;
 	@OneToOne
-	@JsonManagedReference
+	@JsonBackReference("doctor")
 	private Doctor doctor;
 	private String feedbackComment;
 }
