@@ -7,15 +7,19 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import com.doctor.controller.AdminController;
 import com.doctor.entity.Doctor;
 import com.doctor.entity.Patient;
 import com.doctor.entity.User;
+import com.doctor.repo.AdminRepo;
+import com.doctor.repo.FeedbackRepo;
 import com.doctor.repo.PatientRepo;
 import com.doctor.repo.UserRepo;
 
 @Service
 public class PatientServiceImpl implements IPatientService {
+
+
 
 	@Autowired
 	private PatientRepo patientRepo;
@@ -30,7 +34,18 @@ public class PatientServiceImpl implements IPatientService {
 	private UserRepo userRepo;
 	
 	@Autowired
+	private FeedbackRepo feedbackRepo;
+	
+	@Autowired
+	private IUserService userService;
+	
+	
+	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+
+     
+    
 	
 	@Override
 	public Patient savePatient(Patient patient) {
@@ -50,10 +65,30 @@ public class PatientServiceImpl implements IPatientService {
 
 	@Override
 	public Patient removePatient(Patient patient) {
-		Optional<Patient> opt=patientRepo.findById(patient.getPatientId());
-		opt.orElseThrow();
+		try {
+			patient=patientRepo.findById(patient.getPatientId())
+					.orElseThrow(()->new Exception("NO PATIENT RECORDS"));
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}		
+		
+		if(patient.getAppointment()!=null) {
+			patient.getAppointment().setPatient(null);
+			patient.getAppointment().setDoctor(null);
+
+		}
+		
+		if(patient.getFeedback()!=null) {
+			patient.getFeedback().setPatient(null);
+			patient.getFeedback().setDoctor(null);
+		}
+		
+//		userRepo.delete((User)userRepo.findByUsername(patient.getEmail()));
+		apponinmentRadminRepo
 		patientRepo.delete(patient);
-		return opt.get(); 
+
+		return patient; 
 		
 	}
 
@@ -77,7 +112,6 @@ public class PatientServiceImpl implements IPatientService {
 
 	@Override
 	public Patient getPatientListByDate(LocalDate appDate) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

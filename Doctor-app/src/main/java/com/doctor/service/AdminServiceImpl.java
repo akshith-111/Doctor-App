@@ -15,7 +15,6 @@ import com.doctor.repo.UserRepo;
 @Service
 public class AdminServiceImpl implements IAdminService {
 
-    private final AuthenticationProvider authenticationProvider;
 
 
 	@Autowired
@@ -31,10 +30,7 @@ public class AdminServiceImpl implements IAdminService {
 	private UserRepo userRepo;
 
 
-    AdminServiceImpl(AuthenticationProvider authenticationProvider) {
-        this.authenticationProvider = authenticationProvider;
-    }
-
+    
     
 	@Override
 	public Admin saveAdmin(Admin admin) {

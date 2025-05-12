@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -39,7 +40,7 @@ public class Appointment {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int appointmentId;
 	
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 //	@JsonManagedReference
 	private Patient patient;
 	

@@ -1,11 +1,7 @@
 package com.doctor.entity;
 
-import java.io.Serializable;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.CascadeType;
@@ -23,11 +19,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-//@JsonIgnoreProperties("inspection")
 @JsonIdentityInfo(
 		  generator = ObjectIdGenerators.PropertyGenerator.class, 
 		  property = "patientId")
-public class Patient implements Serializable {
+public class Patient {
 
 	/**
 	 * 
@@ -45,7 +40,6 @@ public class Patient implements Serializable {
 	private String password;
 	
 	@OneToOne(mappedBy = "patient",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-//	@JsonBackReference
 	private Appointment appointment;
 	
 	@OneToOne(mappedBy = "patient",fetch = FetchType.EAGER,cascade = CascadeType.ALL)

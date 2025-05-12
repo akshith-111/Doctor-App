@@ -18,6 +18,8 @@ import com.doctor.entity.Appointment;
 import com.doctor.entity.Doctor;
 import com.doctor.repo.DoctorRepo;
 import com.doctor.service.IAppointmentService;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -66,9 +68,15 @@ public class AppointmentController {
 	}
 	@GetMapping("/doctors")
 	public List<Doctor> getDoctors() {
-		System.out.println("ENTERED");
 		return doctorRepo.findAll();
 	}
+	
+	@GetMapping("status/{id}")
+	public String getAppointmentStatus(@PathVariable int id) {
+		
+		return appointmentService.getAppointment(id).getStatus();
+	}
+	
 	
 	
 	
