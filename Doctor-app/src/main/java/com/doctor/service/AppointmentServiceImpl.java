@@ -2,6 +2,7 @@ package com.doctor.service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import com.doctor.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ import com.doctor.repo.PatientRepo;
 @Service
 public class AppointmentServiceImpl implements IAppointmentService {
 
+    private final Doctor doctor;
+
 
 	@Autowired
 	AppointmentRepo appointmentRepo;
@@ -30,6 +33,11 @@ public class AppointmentServiceImpl implements IAppointmentService {
 
 	@Autowired
 	private PatientRepo patientRepo;
+
+
+    AppointmentServiceImpl(Doctor doctor) {
+        this.doctor = doctor;
+    }
 
 
 //	@Autowired
@@ -104,14 +112,25 @@ public class AppointmentServiceImpl implements IAppointmentService {
 	}
 
 	@Override
-	public Appointment updateAppointment(Appointment appointment) {
-		Appointment appointment2=appointmentRepo.findById(appointment.getAppointmentId()).get();
-		appointment.setDoctor(appointment2.getDoctor());
-		appointment.setPatient(appointment2.getPatient());
-//		appointment.setStatus(appointment2.getStatus());
-		appointment.setRemark(appointment2.getRemark());
-		System.out.println(appointment);
-		return appointmentRepo.save(appointment);
+	public Appointment updateAppointment(Map<String,Object> updates) {
+		Appointment actualAppointment=appointmentRepo.findById(Integer.valueOf(String.valueOf(updates.get("appointmentId")))).get();
+		
+		if(updates.containsKey("status"))
+			actualAppointment.setStatus(String.valueOf(updates.get("status")));
+		if(updates.containsKey("remark")) {
+			actualAppointment.setRemark(String.valueOf(updates.get("remark")));
+		}
+		if(updates.containsKey("appointmentDate"))
+			actualAppointment.setAppointmentDate(LocalDate.parse(String.valueOf((updates.get("appointmentDate")))));
+		if(updates.containsKey("doctor"))
+			actualAppointment.setDoctor(((Doctor)(updates.get("doctor"))));
+		if(updates.containsKey("patient"))
+			actualAppointment.setPatient((Patient)(updates.get("patient")));
+		
+		
+		
+		
+		return appointmentRepo.save(actualAppointment);
 	}
 	public Appointment acceptAppointment(Appointment appointment) {
 		return appointmentRepo.save(appointment);

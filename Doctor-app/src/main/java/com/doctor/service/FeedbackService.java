@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +50,10 @@ public class FeedbackService implements IFeedbackService {
 		List<Feedback> li=feedbackRepo.findAll();
 		li=li.stream().filter(f->f.getDoctor().getDoctorId()==doctor.getDoctorId()).toList();
 		return li;
+	}
+	
+	public void deleteFeedback(Feedback feedback) {
+		feedbackRepo.delete(feedback);
 	}
 
 }

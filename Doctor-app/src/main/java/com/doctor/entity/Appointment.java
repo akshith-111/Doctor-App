@@ -40,13 +40,11 @@ public class Appointment {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int appointmentId;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-//	@JsonManagedReference
+	@OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
 	private Patient patient;
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="doctor_id")
-//	@JsonManagedReference
 	private Doctor doctor;
 	
 	private LocalDate appointmentDate;

@@ -2,6 +2,7 @@ package com.doctor.service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public interface IAppointmentService {
 	
 	Appointment deleteAppointment(int AppointmentId);
 	
-	Appointment updateAppointment(Appointment appointment);
+	Appointment updateAppointment(Map<String, Object> updates);
 	
 	List<Appointment> getAppointments(Doctor doctor);
 	

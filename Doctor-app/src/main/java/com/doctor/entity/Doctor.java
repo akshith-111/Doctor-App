@@ -51,7 +51,6 @@ public class Doctor implements Serializable {
 	private String chargedPerVisit;
 	
 	@OneToMany(mappedBy = "doctor",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-//	@JsonBackReference(value="appointments")
 	private List<Appointment> appointments;
 	
 	@OneToOne(mappedBy = "doctor",fetch = FetchType.EAGER,cascade =CascadeType.ALL)

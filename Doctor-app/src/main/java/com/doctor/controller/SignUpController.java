@@ -3,6 +3,7 @@ package com.doctor.controller;
 import java.net.http.HttpResponse.ResponseInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,12 +36,12 @@ public class SignUpController {
 	}
 	
 	@PostMapping("/patient")
-	public Patient patientSignUp(@RequestBody Patient patient) {
+	public ResponseEntity<Patient> patientSignUp(@RequestBody Patient patient) {
 		return patientService.savePatient(patient);
 	}
 	
 	@PostMapping("/doctor")
-	public Doctor doctorSignUp(@RequestBody Doctor doctor) {
+	public ResponseEntity<Doctor> doctorSignUp(@RequestBody Doctor doctor) {
 		return doctorService.saveDoctor(doctor);
 	}
 }

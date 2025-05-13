@@ -35,7 +35,7 @@ public class SecurityConfig {
 	public SecurityFilterChain chain(HttpSecurity http) throws Exception {
 
 		http.csrf(csrf -> csrf.disable()).authorizeHttpRequests(auth -> auth.requestMatchers("/signup/*").permitAll()
-				// .requestMatchers("/get/*").hasAuthority("ROLE_ADMIN")
+				.requestMatchers("/admin/*").hasAuthority("ROLE_ADMIN")
 				.anyRequest().authenticated()).httpBasic(Customizer.withDefaults())
 				.logout(logout -> logout.logoutUrl("/logout"));
 		return http.build();

@@ -3,22 +3,18 @@ package com.doctor.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.doctor.entity.Appointment;
-import com.doctor.entity.Doctor;
 import com.doctor.repo.DoctorRepo;
 import com.doctor.service.IAppointmentService;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -57,19 +53,12 @@ public class AppointmentController {
 		return appointmentService.getAppointment(id);
 	}
 	
-	@PutMapping("/appointment")
-	public Appointment updateAppointment(@RequestBody Appointment appointment) {
-		return appointmentService.updateAppointment(appointment);
-	}
 	
 	@DeleteMapping("/appointment/{id}")
 	public Appointment deleteAppointment(@PathVariable int id) {
 		return appointmentService.deleteAppointment(id);
 	}
-	@GetMapping("/doctors")
-	public List<Doctor> getDoctors() {
-		return doctorRepo.findAll();
-	}
+	
 	
 	@GetMapping("status/{id}")
 	public String getAppointmentStatus(@PathVariable int id) {
