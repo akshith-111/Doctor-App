@@ -40,10 +40,10 @@ public class Appointment {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int appointmentId;
 	
-	@OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
+	@OneToOne
 	private Patient patient;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name="doctor_id")
 	private Doctor doctor;
 	

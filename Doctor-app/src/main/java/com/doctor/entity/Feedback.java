@@ -28,7 +28,7 @@ public class Feedback {
 	private int feedbackId;
 	private String rating;
 	
-	@OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
+	@OneToOne
 	private Patient patient;
 	
 	@OneToOne

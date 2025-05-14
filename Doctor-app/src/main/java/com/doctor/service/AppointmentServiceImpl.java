@@ -1,10 +1,10 @@
 package com.doctor.service;
 
 import java.time.LocalDate;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import com.doctor.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +22,6 @@ import com.doctor.repo.PatientRepo;
 @Service
 public class AppointmentServiceImpl implements IAppointmentService {
 
-    private final Doctor doctor;
-
 
 	@Autowired
 	AppointmentRepo appointmentRepo;
@@ -33,11 +31,6 @@ public class AppointmentServiceImpl implements IAppointmentService {
 
 	@Autowired
 	private PatientRepo patientRepo;
-
-
-    AppointmentServiceImpl(Doctor doctor) {
-        this.doctor = doctor;
-    }
 
 
 //	@Autowired

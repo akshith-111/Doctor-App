@@ -39,10 +39,10 @@ public class Patient {
 	private String address;
 	private String password;
 	
-	@OneToOne(mappedBy = "patient",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "patient",fetch = FetchType.EAGER,cascade = CascadeType.ALL,orphanRemoval = true)
 	private Appointment appointment;
 	
-	@OneToOne(mappedBy = "patient",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "patient",fetch = FetchType.EAGER,cascade = CascadeType.ALL,orphanRemoval = true)
 	private Feedback feedback;
 	
 	

@@ -16,7 +16,7 @@ public interface IDoctorService {
 	public Doctor updateDoctor(Doctor doctor);
 	public ResponseEntity<List<Doctor>> getDoctorList();
 	public ResponseEntity<AvailabilityDates> addAvailability(AvailabilityDates availabilityDates);
-	public AvailabilityDates updateAvailability(AvailabilityDates availabilityDates);
+	public ResponseEntity<AvailabilityDates> updateAvailability(AvailabilityDates availabilityDates);
 	public ResponseEntity<Doctor> getDoctor(Doctor doctor);
 	public ResponseEntity<Doctor> removeDoctor(Doctor doctor);
 	public Doctor getDoctorListBySpeciality(String Speciality);

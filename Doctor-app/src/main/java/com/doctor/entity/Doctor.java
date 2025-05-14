@@ -53,12 +53,13 @@ public class Doctor implements Serializable {
 	@OneToMany(mappedBy = "doctor",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	private List<Appointment> appointments;
 	
-	@OneToOne(mappedBy = "doctor",fetch = FetchType.EAGER,cascade =CascadeType.ALL)
+	@OneToOne(mappedBy = "doctor",fetch = FetchType.EAGER,cascade =CascadeType.ALL,orphanRemoval = true)
 	private Feedback feedback;
 	
 	@OneToOne(mappedBy = "doctor",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	private AvailabilityDates availabilityDates;
 
+	
 	
 
 }
