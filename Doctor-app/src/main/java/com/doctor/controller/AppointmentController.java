@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.doctor.dto.AppointmentDTO;
 import com.doctor.entity.Appointment;
 import com.doctor.repo.DoctorRepo;
 import com.doctor.service.IAppointmentService;
@@ -36,34 +37,37 @@ public class AppointmentController {
 //		
 //	}
 	@PostMapping("/appointment")
-	public ResponseEntity<HttpStatus> appointment(@RequestBody Appointment appointment) {
+	public ResponseEntity<AppointmentDTO> appointment(@RequestBody Appointment appointment) {
 		
-		return appointmentService.saveAppointment(appointment);
+		return appointmentService.saveAppointment(appointment)
+				.map(ResponseEntity::ok)
+					.orElse(ResponseEntity.status(HttpStatus.ALREADY_REPORTED).build());
 		
 	}
 	
 	@GetMapping("/appointment")
-	public List<Appointment> appointments(){
+	public ResponseEntity<List<AppointmentDTO>> appointments(){
+		
 		return appointmentService.getAllAppointments();
 		
 	}
 	
 	@GetMapping("/appointment/{id}")
-	public Appointment oneAppointment(@PathVariable int id) {
+	public ResponseEntity<AppointmentDTO> oneAppointment(@PathVariable int id) {
 		return appointmentService.getAppointment(id);
 	}
 	
 	
 	@DeleteMapping("/appointment/{id}")
-	public Appointment deleteAppointment(@PathVariable int id) {
+	public ResponseEntity<AppointmentDTO> deleteAppointment(@PathVariable int id) {
 		return appointmentService.deleteAppointment(id);
 	}
 	
 	
 	@GetMapping("status/{id}")
-	public String getAppointmentStatus(@PathVariable int id) {
-		
-		return appointmentService.getAppointment(id).getStatus();
+	public ResponseEntity<String> getAppointmentStatus(@PathVariable int id) {
+		String status=appointmentService.getAppointment(id).getBody().getStatus();
+		return new ResponseEntity<String>(status,HttpStatus.OK);
 	}
 	
 	

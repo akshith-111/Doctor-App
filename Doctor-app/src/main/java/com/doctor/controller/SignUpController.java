@@ -1,7 +1,5 @@
 package com.doctor.controller;
 
-import java.net.http.HttpResponse.ResponseInfo;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.doctor.dto.DoctorDTO;
 import com.doctor.entity.Admin;
 import com.doctor.entity.Doctor;
 import com.doctor.entity.Patient;
@@ -41,7 +40,7 @@ public class SignUpController {
 	}
 	
 	@PostMapping("/doctor")
-	public ResponseEntity<Doctor> doctorSignUp(@RequestBody Doctor doctor) {
-		return doctorService.saveDoctor(doctor);
+	public ResponseEntity<DoctorDTO> doctorSignUp(@RequestBody Doctor doctor) {
+		return ResponseEntity.ok(doctorService.saveDoctor(doctor));
 	}
 }

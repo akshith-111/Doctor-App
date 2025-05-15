@@ -71,7 +71,6 @@ public class PatientServiceImpl implements IPatientService {
 	@Transactional
 	public ResponseEntity<HttpStatus> removePatient(Patient patient) {
 
-		System.out.println("=============================================================================");
 		patient = patientRepo.findById(patient.getPatientId()).get();
 		userRepo.delete((User) userRepo.findByUsername(patient.getEmail()));
 
@@ -94,7 +93,7 @@ public class PatientServiceImpl implements IPatientService {
 		
 
 		patientRepo.deleteById(patient.getPatientId());
-
+		
 		return ResponseEntity.ok(HttpStatus.ACCEPTED);
 
 	}
