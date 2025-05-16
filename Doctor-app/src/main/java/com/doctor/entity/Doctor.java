@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Component
+//@Component
 @JsonIdentityInfo(
 		  generator = ObjectIdGenerators.PropertyGenerator.class, 
 		  property = "doctorId")
@@ -53,8 +53,8 @@ public class Doctor implements Serializable {
 	@OneToMany(mappedBy = "doctor",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	private List<Appointment> appointments;
 	
-	@OneToOne(mappedBy = "doctor",fetch = FetchType.EAGER,cascade =CascadeType.ALL,orphanRemoval = true)
-	private Feedback feedback;
+	@OneToMany(mappedBy = "doctor",fetch = FetchType.EAGER,cascade =CascadeType.ALL)
+	private List<Feedback> feedback;
 	
 	@OneToOne(mappedBy = "doctor",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	private AvailabilityDates availabilityDates;

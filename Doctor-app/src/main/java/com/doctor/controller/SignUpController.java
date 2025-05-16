@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.doctor.dto.AdminDTO;
 import com.doctor.dto.DoctorDTO;
+import com.doctor.dto.PatientDTO;
 import com.doctor.entity.Admin;
 import com.doctor.entity.Doctor;
 import com.doctor.entity.Patient;
@@ -29,14 +31,14 @@ public class SignUpController {
 	private IDoctorService doctorService;
 	
 	@PostMapping("/admin")
-	public Admin adminSignUp(@RequestBody Admin admin) {
+	public ResponseEntity<AdminDTO> adminSignUp(@RequestBody Admin admin) {
 		
-		return adminService.saveAdmin(admin);
+		return ResponseEntity.ok(adminService.saveAdmin(admin));
 	}
 	
 	@PostMapping("/patient")
-	public ResponseEntity<Patient> patientSignUp(@RequestBody Patient patient) {
-		return patientService.savePatient(patient);
+	public ResponseEntity<PatientDTO> patientSignUp(@RequestBody Patient patient) {
+		return ResponseEntity.ok(patientService.savePatient(patient));
 	}
 	
 	@PostMapping("/doctor")

@@ -1,14 +1,13 @@
 package com.doctor.service;
 
 import java.util.List;
-import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.doctor.dto.FeedbackDTO;
 import com.doctor.entity.Doctor;
 import com.doctor.entity.Feedback;
 import com.doctor.entity.Patient;
@@ -29,31 +28,38 @@ public class FeedbackService implements IFeedbackService {
 	@Autowired
 	private DoctorRepo doctorRepo;
 	
+	@Autowired
+	private ModelMapper modelMapper;
+	
 	@Override
-	public Feedback addFeedback(Feedback feedback) {
+	public FeedbackDTO addFeedback(Feedback feedback) {
 		User user=(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Patient patient=patientRepo.findByEmail(user.getUsername()).get();
 		Doctor doctor=patient.getAppointment().getDoctor();
 		feedback.setDoctor(doctor);
 		feedback.setPatient(patient);
-		return feedbackRepo.save(feedback);
+		feedback=feedbackRepo.save(feedback);
+		FeedbackDTO feedbackDTO=modelMapper.map(feedback, FeedbackDTO.class);
+		return feedbackDTO;
 	}
 
 	@Override
-	public Feedback getFeedback(Feedback feedback) {
-		Optional<Feedback> opt= feedbackRepo.findById(feedback.getFeedbackId());
-		return opt.get();
+	public FeedbackDTO getFeedback(Feedback feedback) {
+		feedback= feedbackRepo.findById(feedback.getFeedbackId()).get();
+		FeedbackDTO feedbackDTO=modelMapper.map(feedback, FeedbackDTO.class);
+		return feedbackDTO;
 	}
 
+	
 	@Override
-	public List<Feedback> getAllFeedbacks(Doctor doctor) {
-		List<Feedback> li=feedbackRepo.findAll();
-		li=li.stream().filter(f->f.getDoctor().getDoctorId()==doctor.getDoctorId()).toList();
-		return li;
+	public List<FeedbackDTO> getAllFeedbacks(Doctor doctor) {
+		
+		List<Feedback> feedbackList=feedbackRepo.findByDoctor(doctor);
+		List<FeedbackDTO> feedbackDTO=feedbackList.stream().map(f->modelMapper.map(f, FeedbackDTO.class)).toList();
+
+		return feedbackDTO;
 	}
 	
-	public void deleteFeedback(Feedback feedback) {
-		feedbackRepo.delete(feedback);
-	}
+	
 
 }

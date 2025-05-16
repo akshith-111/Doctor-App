@@ -10,7 +10,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.doctor.controller.UsersController;
+
+import com.doctor.dto.AvailabilityDatesDTO;
 import com.doctor.dto.DoctorDTO;
 import com.doctor.entity.Appointment;
 import com.doctor.entity.AvailabilityDates;
@@ -18,31 +19,17 @@ import com.doctor.entity.Doctor;
 import com.doctor.entity.Feedback;
 import com.doctor.entity.Patient;
 import com.doctor.entity.User;
-import com.doctor.repo.AppointmentRepo;
 import com.doctor.repo.AvailabilityDatesRepo;
 import com.doctor.repo.DoctorRepo;
-import com.doctor.repo.FeedbackRepo;
-import com.doctor.repo.PatientRepo;
 import com.doctor.repo.UserRepo;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 
 @Service
 public class DoctorServiceImpl implements IDoctorService {
 
-    private final PatientRepo patientRepo;
 
 
-
-
-//	@Autowired
-//	private PatientRepo patientRepo;
-	
-	@PersistenceContext
-	private EntityManager entityManager;
-	
 	@Autowired
 	private DoctorRepo doctorRepo;
 
@@ -52,30 +39,19 @@ public class DoctorServiceImpl implements IDoctorService {
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+	
 	@Autowired
-	private User user;
+	private AvailabilityDatesRepo availabilityDatesRepo;
 
+	
 	@Autowired
-	AvailabilityDatesRepo availabilityDatesRepo;
-
-	@Autowired
-	AppointmentRepo appointmentRepo;
-
-	@Autowired
-	FeedbackRepo feedbackRepo;
-
-	@Autowired
-	ModelMapper mapper;
-    DoctorServiceImpl(PatientRepo patientRepo) {
-        this.patientRepo = patientRepo;
-    }
-
+	private ModelMapper mapper;
 
 
 	@Override
 	public DoctorDTO saveDoctor(Doctor doctor) {
-		System.out.println(user);
 		doctor.setPassword(bCryptPasswordEncoder.encode(doctor.getPassword()));
+		User user=new User();
 		user.setPassword(doctor.getPassword());
 		user.setRole("DOCTOR");
 		user.setUsername(doctor.getEmail());
@@ -87,35 +63,44 @@ public class DoctorServiceImpl implements IDoctorService {
 	}
 
 	@Override
-	public Doctor updateDoctor(Doctor doctor) {
-		// TODO Auto-generated method stub
-		return null;
+	public DoctorDTO updateDoctor(Doctor doctor) {
+		Doctor actualDoctor =doctorRepo.findById(doctor.getDoctorId()).orElseThrow();
+		doctor.setAvailabilityDates(actualDoctor.getAvailabilityDates());
+		doctor.setFeedback(actualDoctor.getFeedback());
+		doctorRepo.save(doctor);
+		DoctorDTO doctorDTO=mapper.map(doctor,DoctorDTO.class);
+		return doctorDTO;
 	}
 
 	@Override
-	public ResponseEntity<List<Doctor>> getDoctorList() {
+	public List<DoctorDTO> getDoctorList() {
 
-		return ResponseEntity.ok(doctorRepo.findAll());
+		List<Doctor> doctorList=doctorRepo.findAll();
+		List<DoctorDTO> dtoList=doctorList.stream().map(d->mapper.map(d, DoctorDTO.class)).toList();
+		return dtoList;
 	}
 
 	@Override
 	@PreAuthorize("hasRole('ROLE_DOCTOR')")
-	public ResponseEntity<AvailabilityDates> addAvailability(AvailabilityDates availabilityDates) {
+	public AvailabilityDatesDTO addAvailability(AvailabilityDates availabilityDates) {
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Doctor doctor = doctorRepo.findByEmail(user.getUsername());
 		availabilityDates.setDoctor(doctor);
-		return ResponseEntity.ok(availabilityDatesRepo.save(availabilityDates));
+		availabilityDates= availabilityDatesRepo.save(availabilityDates);
+		AvailabilityDatesDTO availabilityDatesDTO=mapper.map(availabilityDates, AvailabilityDatesDTO.class);
+		return availabilityDatesDTO;
 	}
 
 	@Override
 	@PreAuthorize("hasRole('ROLE_DOCTOR')")
-	public ResponseEntity<AvailabilityDates> updateAvailability(AvailabilityDates availabilityDates) {
+	public AvailabilityDatesDTO updateAvailability(AvailabilityDates availabilityDates) {
 		AvailabilityDates actualAvailabilityDates = availabilityDatesRepo
 				.findById(availabilityDates.getAvailabilityId()).get();
 
 		actualAvailabilityDates.setEndDate(availabilityDates.getEndDate());
 		actualAvailabilityDates.setFromDate(availabilityDates.getFromDate());
-		return ResponseEntity.ok(actualAvailabilityDates);
+		AvailabilityDatesDTO availabilityDatesDTO=mapper.map(actualAvailabilityDates, AvailabilityDatesDTO.class);
+		return availabilityDatesDTO;
 	}
 
 	@Override
@@ -128,11 +113,11 @@ public class DoctorServiceImpl implements IDoctorService {
 
 	@Override
 	@Transactional
-	public ResponseEntity<Doctor> removeDoctor(Doctor doctor) {
+	public DoctorDTO removeDoctor(Doctor doctor) {
 		doctor = doctorRepo.findById(doctor.getDoctorId()).get();
 
 		List<Appointment> appointments = doctor.getAppointments();
-		Feedback feedback = doctor.getFeedback();
+		List<Feedback> feedback  = doctor.getFeedback();
 
 		if(appointments!=null) {
 			appointments.forEach(appo->{
@@ -142,18 +127,19 @@ public class DoctorServiceImpl implements IDoctorService {
 		}
 
 		if (feedback != null) {
-			feedback.getDoctor().setFeedback(null);
-			feedback.getPatient().setFeedback(null);
-			feedback.setDoctor(null);
-			feedback.setPatient(null);
-
+			feedback.forEach(f->{
+				f.getPatient().setFeedback(null);
+				f.setPatient(null);
+				f.setDoctor(null);
+			});
 		}
 		
 		doctorRepo.delete(doctor);
 		userRepo.delete((User) userRepo.findByUsername(doctor.getEmail()));
 		
-//		entityManager.clear();
-		return ResponseEntity.ok(doctor);
+		DoctorDTO doctorDTO=mapper.map(doctor, DoctorDTO.class);
+		
+		return doctorDTO;
 	}
 
 	@Override

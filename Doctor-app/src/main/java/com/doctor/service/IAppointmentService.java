@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.doctor.dto.AppointmentDTO;
 import com.doctor.entity.Appointment;
 import com.doctor.entity.Doctor;
+import com.doctor.entity.Patient;
 
 @Service
 public interface IAppointmentService {
@@ -29,9 +30,11 @@ public interface IAppointmentService {
 	
 	ResponseEntity<AppointmentDTO> updateAppointment(Map<String, Object> updates);
 	
-	List<Appointment> getAppointments(Doctor doctor);
+	List<AppointmentDTO> getAppointments(Doctor doctor);
 	
-	List<Appointment> getAppointments(LocalDate date);
+	List<AppointmentDTO> getAppointments(LocalDate date);
+
+	AppointmentDTO getAppointment(Patient patient);
 
 
 }

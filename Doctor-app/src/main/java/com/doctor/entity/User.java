@@ -22,8 +22,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Component
-@Scope("prototype")
+//@Component
+//@Scope("prototype")
 public class User implements UserDetails {
 
 	/**

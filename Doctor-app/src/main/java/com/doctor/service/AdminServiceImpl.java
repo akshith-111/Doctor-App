@@ -1,12 +1,12 @@
 package com.doctor.service;
 
 import java.util.List;
+
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,22 +31,22 @@ public class AdminServiceImpl implements IAdminService {
 	@Autowired
 	private AdminRepo adminRepo;
 	
-	@Autowired
-	private User user;//getting user object
 	
 	@Autowired
 	private UserRepo userRepo;
 
     
 	@Override
-	public Admin saveAdmin(Admin admin) {
+	public AdminDTO saveAdmin(Admin admin) {
 		admin.setPassword(bCryptPasswordEncoder.encode(admin.getPassword()));
+		User user=new User();
 		admin=adminRepo.save(admin);
 		user.setPassword(admin.getPassword());
 		user.setRole("ADMIN");
 		user.setUsername(admin.getEmail());
 		userRepo.save(user);//saving user object
-		return admin;
+		AdminDTO adminDTO=modelMapper.map(admin, AdminDTO.class);
+		return adminDTO;
 	}
 
 

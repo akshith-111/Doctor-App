@@ -9,23 +9,23 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import com.doctor.SecurityConfig.BeanConfigurations;
+import com.doctor.controller.AdminController;
 import com.doctor.dto.AppointmentDTO;
 import com.doctor.entity.Appointment;
 import com.doctor.entity.Doctor;
 import com.doctor.entity.Patient;
 import com.doctor.entity.User;
 import com.doctor.repo.AppointmentRepo;
+import com.doctor.repo.AvailabilityDatesRepo;
 import com.doctor.repo.DoctorRepo;
 import com.doctor.repo.PatientRepo;
 
 @Service
 public class AppointmentServiceImpl implements IAppointmentService {
 
-	@Autowired
+    @Autowired
 	AppointmentRepo appointmentRepo;
 
 	@Autowired
@@ -37,10 +37,8 @@ public class AppointmentServiceImpl implements IAppointmentService {
 	@Autowired
 	private ModelMapper mapper;
 
-  
-	
-	
-	@Override
+
+  	@Override
 	public Optional<AppointmentDTO> saveAppointment(Appointment appointment) {
 		User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (!(appointmentRepo.findAll().stream()
@@ -122,14 +120,26 @@ public class AppointmentServiceImpl implements IAppointmentService {
 	}
 
 	@Override
-	public List<Appointment> getAppointments(Doctor doctor) {
-		return appointmentRepo.findByDoctor(doctor);
+	public List<AppointmentDTO> getAppointments(Doctor doctor) {
+		
+		List<Appointment> appointmentList=appointmentRepo.findByDoctor(doctor);
+		List<AppointmentDTO> dtoList=appointmentList.stream().map(a->mapper.map(a, AppointmentDTO.class)).toList();
+		return dtoList;
 	}
 
 	@Override
-	public List<Appointment> getAppointments(LocalDate date) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<AppointmentDTO> getAppointments(LocalDate date) {
+		
+		List<Appointment> appointmentList=appointmentRepo.findByAppointmentDate(date);
+		List<AppointmentDTO> dtoList= appointmentList.stream().map(a->mapper.map(a, AppointmentDTO.class)).toList();
+		
+		return dtoList;
+	}
+
+	@Override
+	public AppointmentDTO getAppointment(Patient patient) {
+		AppointmentDTO appointmentDTO=mapper.map(appointmentRepo.findByPatient(patient),AppointmentDTO.class);
+		return appointmentDTO;
 	}
 
 }

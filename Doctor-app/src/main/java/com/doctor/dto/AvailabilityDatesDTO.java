@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 public class AvailabilityDatesDTO {
 
 	
-	private int availabilityId;
+//	private int availabilityId;
 	private Doctor doctor;
 	private Date fromDate;
 	private Date endDate;

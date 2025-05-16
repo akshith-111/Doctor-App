@@ -3,21 +3,19 @@ package com.doctor.service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.doctor.dto.PatientDTO;
 import com.doctor.entity.Appointment;
 import com.doctor.entity.Doctor;
 import com.doctor.entity.Feedback;
 import com.doctor.entity.Patient;
 import com.doctor.entity.User;
 import com.doctor.repo.AppointmentRepo;
-import com.doctor.repo.FeedbackRepo;
 import com.doctor.repo.PatientRepo;
 import com.doctor.repo.UserRepo;
 
@@ -26,6 +24,7 @@ import jakarta.transaction.Transactional;
 @Service
 public class PatientServiceImpl implements IPatientService {
 
+
 	
 	@Autowired
 	private AppointmentRepo appointmentRepo;
@@ -33,43 +32,43 @@ public class PatientServiceImpl implements IPatientService {
 	@Autowired
 	private PatientRepo patientRepo;
 
-	@Autowired
-	private PatientRepo doctorRepo;
-
-	@Autowired
-	private User user;// getting user object
-
+	
 	@Autowired
 	private UserRepo userRepo;
 
-	@Autowired
-	private FeedbackRepo feedbackRepo;
-
-	@Autowired
-	private IUserService userService;
 
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+	@Autowired
+	private ModelMapper mapper;
+
 	@Override
-	public ResponseEntity<Patient> savePatient(Patient patient) {
+	public PatientDTO savePatient(Patient patient) {
 		patient.setPassword(bCryptPasswordEncoder.encode(patient.getPassword()));
+		User user=new User();
 		user.setPassword(patient.getPassword());
 		user.setRole("PATIENT");
 		user.setUsername(patient.getEmail());
 		userRepo.save(user);
-		return ResponseEntity.ok(patientRepo.save(patient));
+		patient=patientRepo.save(patient);
+		PatientDTO patientDTO =mapper.map(patient, PatientDTO.class);
+		return patientDTO;
 	}
 
 	@Override
-	public ResponseEntity<Patient> updatePatient(Patient patient) {
-
-		return ResponseEntity.ok(patientRepo.save(patient));
+	public PatientDTO updatePatient(Patient patient) {
+		Patient actualPatient=patientRepo.findById(patient.getPatientId()).orElseThrow();
+		patient.setAppointment(actualPatient.getAppointment());
+		patient.setFeedback(actualPatient.getFeedback());
+		patient=patientRepo.save(patient);
+		PatientDTO patientDto=mapper.map(patient, PatientDTO.class);
+		return patientDto;
 	}
 
 	@Override
 	@Transactional
-	public ResponseEntity<HttpStatus> removePatient(Patient patient) {
+	public PatientDTO removePatient(Patient patient) {
 
 		patient = patientRepo.findById(patient.getPatientId()).get();
 		userRepo.delete((User) userRepo.findByUsername(patient.getEmail()));
@@ -93,27 +92,33 @@ public class PatientServiceImpl implements IPatientService {
 		
 
 		patientRepo.deleteById(patient.getPatientId());
-		
-		return ResponseEntity.ok(HttpStatus.ACCEPTED);
+		PatientDTO patientDTO=mapper.map(patient, PatientDTO.class);
+		return patientDTO;
 
 	}
 
 	@Override
-	public Patient getPatient(Patient patient) {
-		Optional<Patient> opt = patientRepo.findById(patient.getPatientId());
-		opt.orElseThrow();
-		return opt.get();
+	public PatientDTO getPatient(Patient patient) {
+		patient = patientRepo.findById(patient.getPatientId()).orElseThrow();
+		PatientDTO patientDTO=mapper.map(patient, PatientDTO.class);
+		return patientDTO;
 	}
 
 	@Override
-	public ResponseEntity<List<Patient>> getAllPatients() {
+	public List<PatientDTO>getAllPatients() {
 
-		return ResponseEntity.ok(patientRepo.findAll());
+		List<Patient> patientList=patientRepo.findAll();
+		List<PatientDTO> dtoList=patientList.stream().map(p->mapper.map(p, PatientDTO.class)).toList();
+		return dtoList;
 	}
 
 	@Override
-	public Patient getPatientListByDoctor(Doctor doctor) {
-		return null;
+	public List<PatientDTO> getPatientListByDoctor(Doctor doctor) {
+			
+		List<Appointment> appointmentList =appointmentRepo.findByDoctor(doctor);
+		List<PatientDTO> patientDto= appointmentList.stream().map(a->mapper.map(a.getPatient(), PatientDTO.class)).toList();
+					
+		return patientDto;
 	}
 
 	@Override
@@ -122,7 +127,7 @@ public class PatientServiceImpl implements IPatientService {
 	}
 
 	@Override
-	public ResponseEntity<Patient> patchUpdatePatient(Map<String, Object> updates) {
+	public PatientDTO patchUpdatePatient(Map<String, Object> updates) {
 
 		Patient patient = patientRepo.findById(Integer.valueOf(String.valueOf(updates.get("patientId")))).get();
 
@@ -153,8 +158,9 @@ public class PatientServiceImpl implements IPatientService {
 		if (updates.containsKey("feedback"))
 			patient.setFeedback((Feedback) (updates.get("feedback")));
 		
-			patientRepo.save(patient);
-		return ResponseEntity.ok(patient);
+			patient=patientRepo.save(patient);
+			PatientDTO patientDto=mapper.map(patient, PatientDTO.class);
+		return patientDto;
 	}
 
 }

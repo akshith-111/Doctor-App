@@ -3,7 +3,6 @@ package com.doctor.controller;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.doctor.dto.AdminDTO;
 import com.doctor.dto.DoctorDTO;
+import com.doctor.dto.PatientDTO;
 import com.doctor.entity.Doctor;
 import com.doctor.entity.Patient;
 import com.doctor.service.IAdminService;
@@ -25,22 +25,25 @@ import com.doctor.service.IAppointmentService;
 import com.doctor.service.IDoctorService;
 import com.doctor.service.IPatientService;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("/admin")
+@RequiredArgsConstructor
 public class AdminController {
 
    
-	@Autowired
-	private IAppointmentService appointmentService;
-
-	@Autowired
-	private IPatientService patientService;
-
-	@Autowired
-	private IDoctorService doctorService;
 	
-	@Autowired
-	private IAdminService adminService;
+	private final IAppointmentService appointmentService;
+
+	
+	private final IPatientService patientService;
+
+
+	private final IDoctorService doctorService;
+	
+	
+	private final IAdminService adminService;
 
 
 
@@ -54,39 +57,39 @@ public class AdminController {
 	//PATIENT OPERATIONS
 	
 	@DeleteMapping("/removepatient")
-	public ResponseEntity<HttpStatus> deletePatient(@RequestBody Patient patient) {
+	public ResponseEntity<PatientDTO> deletePatient(@RequestBody Patient patient) {
 
-		return patientService.removePatient(patient);
+		return ResponseEntity.ok(patientService.removePatient(patient));
 	}
 
 	@GetMapping("/viewpatient")
-	public Patient getPatient(@RequestBody Patient patient) {
+	public ResponseEntity<PatientDTO> getPatient(@RequestBody Patient patient) {
 
-		return patientService.getPatient(patient);
+		return ResponseEntity.ok(patientService.getPatient(patient));
 	}
 
 	@GetMapping("/viewallpatients")
-	public ResponseEntity<List<Patient>> getPatientList() {
+	public ResponseEntity<List<PatientDTO>> getPatientList() {
 
-		return patientService.getAllPatients();
+		return ResponseEntity.ok(patientService.getAllPatients());
 	}
 
 	@PutMapping("/modifypatient")
-	public ResponseEntity<Patient> modifyPatient(@RequestBody Patient patient) {
+	public ResponseEntity<PatientDTO> modifyPatient(@RequestBody Patient patient) {
 
-		return patientService.updatePatient(patient);
+		return ResponseEntity.ok(patientService.updatePatient(patient));
 	}
 
 	@PostMapping("/addpatient")
-	public ResponseEntity<Patient> addPatient(@RequestBody Patient patient) {
+	public ResponseEntity<PatientDTO> addPatient(@RequestBody Patient patient) {
 
-		return patientService.savePatient(patient);
+		return ResponseEntity.ok(patientService.savePatient(patient));
 	}
 
 	@PatchMapping("/modifypatient")
-	public ResponseEntity<Patient> modifyPatient(@RequestBody Map<String, Object> updates) {
+	public ResponseEntity<PatientDTO> modifyPatient(@RequestBody Map<String, Object> updates) {
 
-		return patientService.patchUpdatePatient(updates);
+		return ResponseEntity.ok(patientService.patchUpdatePatient(updates));
 	}
 	
 	
@@ -104,15 +107,23 @@ public class AdminController {
 	}
 
 	@GetMapping("/getalldoctors")
-	public ResponseEntity<List<Doctor>> getDoctors() {
-		return doctorService.getDoctorList();
+	public ResponseEntity<List<DoctorDTO>> getDoctors() {
+		return ResponseEntity.ok(doctorService.getDoctorList());
 	}
 	
 	@DeleteMapping("/removedoctor")
-	public ResponseEntity<Doctor> deleteDoctor(@RequestBody Doctor doctor) {
+	public ResponseEntity<DoctorDTO> deleteDoctor(@RequestBody Doctor doctor) {
 
-		return doctorService.removeDoctor(doctor);
+		return ResponseEntity.ok(doctorService.removeDoctor(doctor));
 	}
+	
+	@PutMapping("/modifydoctor")
+	public ResponseEntity<DoctorDTO> modifyPatient(@RequestBody Doctor doctor) {
+
+		return ResponseEntity.ok(doctorService.updateDoctor(doctor));
+	}
+	
+	
 	
 	//ADMIN OPERATIONS
 	
@@ -123,6 +134,14 @@ public class AdminController {
 	@GetMapping("/getadmins")
 	public ResponseEntity<List<AdminDTO>> getadmins() {
 		return adminService.getAdminList();
+	}
+	
+	
+	//status
+	@GetMapping("status/{id}")
+	public ResponseEntity<String> getAppointmentStatus(@PathVariable int id) {
+		String status=appointmentService.getAppointment(id).getBody().getStatus();
+		return new ResponseEntity<String>(status,HttpStatus.OK);
 	}
 	
 

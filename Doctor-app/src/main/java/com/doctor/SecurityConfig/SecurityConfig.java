@@ -36,6 +36,7 @@ public class SecurityConfig {
 
 		http.csrf(csrf -> csrf.disable()).authorizeHttpRequests(auth -> auth.requestMatchers("/signup/*").permitAll()
 				.requestMatchers("/admin/*/*").hasAuthority("ROLE_ADMIN")
+				.requestMatchers("/doctor/*/*").hasAuthority("ROLE_DOCTOR")
 				.anyRequest().authenticated()).httpBasic(Customizer.withDefaults())
 				.logout(logout -> logout.logoutUrl("/logout"));
 		return http.build();

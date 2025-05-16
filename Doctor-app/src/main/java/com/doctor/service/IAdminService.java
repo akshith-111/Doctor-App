@@ -12,7 +12,7 @@ import com.doctor.entity.Admin;
 @Service
 public interface IAdminService {
 
-	public Admin saveAdmin(Admin admin);
+	public AdminDTO saveAdmin(Admin admin);
 	public Admin udpateAdmin(Admin admin);
 	public Admin removeAdmin(Admin admin);
 //	public Admin viewAdmin(Admin admin);

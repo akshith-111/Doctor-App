@@ -5,38 +5,33 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.doctor.dto.AppointmentDTO;
 import com.doctor.entity.Appointment;
-import com.doctor.repo.DoctorRepo;
+import com.doctor.entity.Patient;
 import com.doctor.service.IAppointmentService;
 
 
 
 @RestController
+@RequestMapping("/patient")
 public class AppointmentController {
 
 		
 	@Autowired
 	private IAppointmentService appointmentService;
 	
-	@Autowired
-	private DoctorRepo doctorRepo;
 
-    
-//	@PostMapping("/appointment/{doctorId}")
-//	public Appointment appointment(@RequestParam String remarks ,@RequestParam String date, @PathVariable int doctorId) {
-//		
-//		return appointmentService.saveAppointment(remarks,date,doctorId);
-//		
-//	}
 	@PostMapping("/appointment")
+	@PreAuthorize("hasRole('ROLE_PATIENT')")
 	public ResponseEntity<AppointmentDTO> appointment(@RequestBody Appointment appointment) {
 		
 		return appointmentService.saveAppointment(appointment)
@@ -64,11 +59,12 @@ public class AppointmentController {
 	}
 	
 	
-	@GetMapping("status/{id}")
-	public ResponseEntity<String> getAppointmentStatus(@PathVariable int id) {
-		String status=appointmentService.getAppointment(id).getBody().getStatus();
-		return new ResponseEntity<String>(status,HttpStatus.OK);
+	@GetMapping("/appointmentbypatient")
+	@PreAuthorize("hasRole('ROLE_PATIENT')")
+	public ResponseEntity<AppointmentDTO> oneAppointment(@RequestBody Patient patient){
+		return ResponseEntity.ok(appointmentService.getAppointment(patient));
 	}
+	
 	
 	
 	

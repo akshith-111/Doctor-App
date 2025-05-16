@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PatientDTO {
 
-	private int patientId;
+//	private int patientId;
 	private String patientName;
 	private String mobileNo;
 	private String email;
