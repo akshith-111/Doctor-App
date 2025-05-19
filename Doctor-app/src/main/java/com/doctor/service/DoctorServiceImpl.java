@@ -24,28 +24,26 @@ import com.doctor.repo.DoctorRepo;
 import com.doctor.repo.UserRepo;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class DoctorServiceImpl implements IDoctorService {
 
 
-
-	@Autowired
-	private DoctorRepo doctorRepo;
-
-	@Autowired
-	private UserRepo userRepo;
-
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	private final DoctorRepo doctorRepo;
 
 	
-	@Autowired
-	private AvailabilityDatesRepo availabilityDatesRepo;
+	private final UserRepo userRepo;
 
 	
-	@Autowired
-	private ModelMapper mapper;
+	private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+	
+	private final AvailabilityDatesRepo availabilityDatesRepo;
+
+
+	private final ModelMapper mapper;
 
 
 	@Override

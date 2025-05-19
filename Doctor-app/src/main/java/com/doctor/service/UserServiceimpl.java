@@ -13,17 +13,20 @@ import com.doctor.repo.AdminRepo;
 import com.doctor.repo.PatientRepo;
 import com.doctor.repo.UserRepo;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class UserServiceimpl implements UserDetailsService, IUserService {
 
-	@Autowired
-	private UserRepo userRepo;
 	
-	@Autowired
-	private AdminRepo adminRepo;
+	private final UserRepo userRepo;
 	
-	@Autowired
-	private PatientRepo patientRepo;
+	
+	private final AdminRepo adminRepo;
+	
+	
+	private final PatientRepo patientRepo;
 
 	@Override
 	public User addUser(User user) {

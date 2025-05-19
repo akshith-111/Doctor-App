@@ -14,26 +14,24 @@ import org.springframework.stereotype.Service;
 import com.doctor.dto.AdminDTO;
 import com.doctor.entity.Admin;
 import com.doctor.entity.User;
+import com.doctor.exceptionhandling.ResourceNotFoundException;
 import com.doctor.repo.AdminRepo;
 import com.doctor.repo.UserRepo;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class AdminServiceImpl implements IAdminService {
 
-	@Autowired
-    private ModelMapper modelMapper;
 
+    private final ModelMapper modelMapper;
 
-
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	
-	@Autowired
-	private AdminRepo adminRepo;
+	private final AdminRepo adminRepo;
 	
-	
-	@Autowired
-	private UserRepo userRepo;
+	private final UserRepo userRepo;
 
     
 	@Override
@@ -75,7 +73,7 @@ public class AdminServiceImpl implements IAdminService {
 
 	@Override
 	public ResponseEntity<AdminDTO>getAdmin(int id) {
-			Admin admin=adminRepo.findById(id).get();
+			Admin admin=adminRepo.findById(id).orElseThrow(()->new ResourceNotFoundException("No data Found on this id "+id));
 			AdminDTO dto=modelMapper.map(admin, AdminDTO.class);
 		return new ResponseEntity<AdminDTO>(dto,HttpStatus.OK);
 	}
