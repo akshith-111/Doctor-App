@@ -2,10 +2,10 @@ package com.doctor.service;
 
 import java.util.List;
 
+
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -58,7 +58,7 @@ public class AdminServiceImpl implements IAdminService {
 	@Override
 	public Admin removeAdmin(Admin admin) {
 		Optional<Admin> opt= adminRepo.findById(admin.getAdminId());
-		opt.orElseThrow();
+		opt.orElseThrow(()->new ResourceNotFoundException("No Data Found on this id: "+admin.getAdminId()));
 		adminRepo.delete(admin);
 		return opt.get();
 	}
@@ -73,7 +73,8 @@ public class AdminServiceImpl implements IAdminService {
 
 	@Override
 	public ResponseEntity<AdminDTO>getAdmin(int id) {
-			Admin admin=adminRepo.findById(id).orElseThrow(()->new ResourceNotFoundException("No data Found on this id "+id));
+			Admin admin=adminRepo.findById(id)
+					.orElseThrow(()->new ResourceNotFoundException("No data Found on this id "+id));
 			AdminDTO dto=modelMapper.map(admin, AdminDTO.class);
 		return new ResponseEntity<AdminDTO>(dto,HttpStatus.OK);
 	}

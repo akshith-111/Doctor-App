@@ -2,8 +2,8 @@ package com.doctor.service;
 
 import java.util.List;
 
+
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -12,29 +12,27 @@ import com.doctor.entity.Doctor;
 import com.doctor.entity.Feedback;
 import com.doctor.entity.Patient;
 import com.doctor.entity.User;
-import com.doctor.repo.DoctorRepo;
+import com.doctor.exceptionhandling.ResourceNotFoundException;
 import com.doctor.repo.FeedbackRepo;
 import com.doctor.repo.PatientRepo;
 
-@Service
-public class FeedbackService implements IFeedbackService {
+import lombok.RequiredArgsConstructor;
 
-	@Autowired
-	private FeedbackRepo feedbackRepo;
+@Service
+@RequiredArgsConstructor
+public class FeedbackServiceImpl implements IFeedbackService {
+
+	private final FeedbackRepo feedbackRepo;
 	
-	@Autowired
-	private PatientRepo patientRepo;
-	
-	@Autowired
-	private DoctorRepo doctorRepo;
-	
-	@Autowired
-	private ModelMapper modelMapper;
+	private final PatientRepo patientRepo;
+		
+	private final ModelMapper modelMapper;
 	
 	@Override
 	public FeedbackDTO addFeedback(Feedback feedback) {
 		User user=(User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		Patient patient=patientRepo.findByEmail(user.getUsername()).get();
+		Patient patient=patientRepo.findByEmail(user.getUsername())
+				.orElseThrow(()->new ResourceNotFoundException("No Data Found On the id: "+user.getUsername()));
 		Doctor doctor=patient.getAppointment().getDoctor();
 		feedback.setDoctor(doctor);
 		feedback.setPatient(patient);

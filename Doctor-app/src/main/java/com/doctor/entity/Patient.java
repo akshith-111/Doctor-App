@@ -2,6 +2,7 @@ package com.doctor.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.CascadeType;
@@ -24,10 +25,6 @@ import lombok.NoArgsConstructor;
 		  property = "patientId")
 public class Patient {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int patientId;

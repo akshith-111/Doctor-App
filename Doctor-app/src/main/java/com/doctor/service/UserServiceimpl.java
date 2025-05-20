@@ -2,17 +2,13 @@ package com.doctor.service;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
 import com.doctor.entity.User;
-import com.doctor.repo.AdminRepo;
-import com.doctor.repo.PatientRepo;
+import com.doctor.exceptionhandling.ResourceNotFoundException;
 import com.doctor.repo.UserRepo;
-
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -22,12 +18,6 @@ public class UserServiceimpl implements UserDetailsService, IUserService {
 	
 	private final UserRepo userRepo;
 	
-	
-	private final AdminRepo adminRepo;
-	
-	
-	private final PatientRepo patientRepo;
-
 	@Override
 	public User addUser(User user) {
 		
@@ -49,7 +39,7 @@ public class UserServiceimpl implements UserDetailsService, IUserService {
 	@Override
 	public User removeUser(User user) {
 		Optional<User> opt=userRepo.findById(user.getUserId());
-		opt.orElseThrow();
+		opt.orElseThrow(()->new ResourceNotFoundException("No Data Found on this Id: "+user.getUserId()));
 		userRepo.delete(user);
 		return opt.get();
 	}

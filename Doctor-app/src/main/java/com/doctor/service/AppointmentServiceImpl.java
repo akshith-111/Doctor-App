@@ -1,17 +1,16 @@
 package com.doctor.service;
 
 import java.time.LocalDate;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import com.doctor.controller.AdminController;
 import com.doctor.dto.AppointmentDTO;
 import com.doctor.entity.Appointment;
 import com.doctor.entity.Doctor;
@@ -19,7 +18,6 @@ import com.doctor.entity.Patient;
 import com.doctor.entity.User;
 import com.doctor.exceptionhandling.ResourceNotFoundException;
 import com.doctor.repo.AppointmentRepo;
-import com.doctor.repo.AvailabilityDatesRepo;
 import com.doctor.repo.DoctorRepo;
 import com.doctor.repo.PatientRepo;
 

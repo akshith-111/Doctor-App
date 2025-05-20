@@ -3,7 +3,6 @@ package com.doctor.service;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,6 +18,7 @@ import com.doctor.entity.Doctor;
 import com.doctor.entity.Feedback;
 import com.doctor.entity.Patient;
 import com.doctor.entity.User;
+import com.doctor.exceptionhandling.ResourceNotFoundException;
 import com.doctor.repo.AvailabilityDatesRepo;
 import com.doctor.repo.DoctorRepo;
 import com.doctor.repo.UserRepo;
@@ -62,7 +62,8 @@ public class DoctorServiceImpl implements IDoctorService {
 
 	@Override
 	public DoctorDTO updateDoctor(Doctor doctor) {
-		Doctor actualDoctor =doctorRepo.findById(doctor.getDoctorId()).orElseThrow();
+		Doctor actualDoctor =doctorRepo.findById(doctor.getDoctorId())
+				.orElseThrow(()->new ResourceNotFoundException("No Data Found on this Id: "+doctor.getDoctorId()));
 		doctor.setAvailabilityDates(actualDoctor.getAvailabilityDates());
 		doctor.setFeedback(actualDoctor.getFeedback());
 		doctorRepo.save(doctor);
@@ -93,7 +94,8 @@ public class DoctorServiceImpl implements IDoctorService {
 	@PreAuthorize("hasRole('ROLE_DOCTOR')")
 	public AvailabilityDatesDTO updateAvailability(AvailabilityDates availabilityDates) {
 		AvailabilityDates actualAvailabilityDates = availabilityDatesRepo
-				.findById(availabilityDates.getAvailabilityId()).get();
+				.findById(availabilityDates.getAvailabilityId())
+				.orElseThrow(()->new ResourceNotFoundException("No Data Found on this Id: "+availabilityDates.getAvailabilityId()));
 
 		actualAvailabilityDates.setEndDate(availabilityDates.getEndDate());
 		actualAvailabilityDates.setFromDate(availabilityDates.getFromDate());
@@ -104,7 +106,8 @@ public class DoctorServiceImpl implements IDoctorService {
 	@Override
 	public ResponseEntity<DoctorDTO> getDoctor(int id) {
 
-		Doctor doctor = doctorRepo.findById(id).get();
+		Doctor doctor = doctorRepo.findById(id)
+				.orElseThrow(()->new ResourceNotFoundException("No Data Found on this Id: "+id));
 		DoctorDTO doctorDTO=mapper.map(doctor, DoctorDTO.class);
 		return new ResponseEntity<DoctorDTO>(doctorDTO,HttpStatus.OK);
 	}
@@ -112,7 +115,9 @@ public class DoctorServiceImpl implements IDoctorService {
 	@Override
 	@Transactional
 	public DoctorDTO removeDoctor(Doctor doctor) {
-		doctor = doctorRepo.findById(doctor.getDoctorId()).get();
+		int id=doctor.getDoctorId();
+		doctor = doctorRepo.findById(id)
+				.orElseThrow(()->new ResourceNotFoundException("No Data Found on this Id: "+id));
 
 		List<Appointment> appointments = doctor.getAppointments();
 		List<Feedback> feedback  = doctor.getFeedback();
@@ -141,9 +146,10 @@ public class DoctorServiceImpl implements IDoctorService {
 	}
 
 	@Override
-	public Doctor getDoctorListBySpeciality(String Speciality) {
-		
-		return null;
+	public List<DoctorDTO> getDoctorListBySpeciality(String speciality) {
+		List<Doctor> doctorList= doctorRepo.findBySpeciality(speciality);
+		List<DoctorDTO> dtoList= doctorList.stream().map(d->mapper.map(d, DoctorDTO.class)).toList();
+		return dtoList;
 	}
 
 }

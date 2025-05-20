@@ -2,8 +2,8 @@ package com.doctor.service;
 
 import java.util.List;
 
+
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.doctor.dto.AdminDTO;

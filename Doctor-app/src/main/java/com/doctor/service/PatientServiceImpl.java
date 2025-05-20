@@ -1,11 +1,11 @@
 package com.doctor.service;
 
 import java.time.LocalDate;
+
 import java.util.List;
 import java.util.Map;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,28 +20,21 @@ import com.doctor.repo.PatientRepo;
 import com.doctor.repo.UserRepo;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class PatientServiceImpl implements IPatientService {
 
-
+	private final AppointmentRepo appointmentRepo;
 	
-	@Autowired
-	private AppointmentRepo appointmentRepo;
+	private final PatientRepo patientRepo;
 
-	@Autowired
-	private PatientRepo patientRepo;
+	private final UserRepo userRepo;
 
-	
-	@Autowired
-	private UserRepo userRepo;
+	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-	@Autowired
-	private ModelMapper mapper;
+	private final ModelMapper mapper;
 
 	@Override
 	public PatientDTO savePatient(Patient patient) {
