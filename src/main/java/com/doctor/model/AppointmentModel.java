@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import org.springframework.stereotype.Component;
 
+import com.doctor.entity.Appointment;
 import com.doctor.entity.Doctor;
 import com.doctor.entity.Patient;
 
@@ -17,8 +18,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AppointmentModel {
 
-	private Patient patient;	
-	private Doctor doctor;
+	private PatientModel patient;	
+	private DoctorModel doctor;
 	private LocalDate appointmentDate;
 	private String status;
 	private String remark;

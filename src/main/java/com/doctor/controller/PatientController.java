@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.doctor.dto.DoctorDTO;
 import com.doctor.dto.PatientDTO;
 import com.doctor.entity.Patient;
+import com.doctor.model.PatientModel;
 import com.doctor.service.IDoctorService;
 import com.doctor.service.IPatientService;
 
@@ -35,15 +36,15 @@ public class PatientController {
 	}
 	
 	@GetMapping("patient/viewpatient")
-	public ResponseEntity<PatientDTO> getPatient(@RequestBody Patient patient) {
+	public ResponseEntity<PatientDTO> getPatient(@RequestBody PatientModel patientModel) {
 
-		return ResponseEntity.ok(patientService.getPatient(patient));
+		return ResponseEntity.ok(patientService.getPatient(patientModel));
 	}
 	
 	@DeleteMapping("admin/removepatient")
-	public ResponseEntity<PatientDTO> deletePatient(@RequestBody Patient patient) {
+	public ResponseEntity<PatientDTO> deletePatient(@RequestBody PatientModel patientModel) {
 
-		return ResponseEntity.ok(patientService.removePatient(patient));
+		return ResponseEntity.ok(patientService.removePatient(patientModel));
 	}
 
 	@GetMapping("admin/viewallpatients")
@@ -53,15 +54,15 @@ public class PatientController {
 	}
 
 	@PutMapping("admin/modifypatient")
-	public ResponseEntity<PatientDTO> modifyPatient(@RequestBody Patient patient) {
+	public ResponseEntity<PatientDTO> modifyPatient(@RequestBody PatientModel patientModel) {
 
-		return ResponseEntity.ok(patientService.updatePatient(patient));
+		return ResponseEntity.ok(patientService.updatePatient(patientModel));
 	}
 
 	@PostMapping("admin/addpatient")
-	public ResponseEntity<PatientDTO> addPatient(@RequestBody Patient patient) {
+	public ResponseEntity<PatientDTO> addPatient(@RequestBody PatientModel patientModel) {
 
-		return ResponseEntity.ok(patientService.savePatient(patient));
+		return ResponseEntity.ok(patientService.savePatient(patientModel));
 	}
 
 	@PatchMapping("admin/modifypatient")

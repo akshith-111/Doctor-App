@@ -4,9 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.doctor.entity.Appointment;
-import com.doctor.entity.AvailabilityDates;
-import com.doctor.entity.Feedback;
+import com.doctor.dto.AvailabilityDatesDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,9 +24,9 @@ public class DoctorModel {
 	private String password;
 	private String chargedPerVisit;
 	
-	private List<Appointment> appointments;
+	private List<AppointmentModel> appointments;
 	
-	private Feedback feedback;
+	private FeedbackModel feedback;
 	
-	private AvailabilityDates availabilityDates;
+	private AvailabilityDatesDTO availabilityDates;
 }

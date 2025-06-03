@@ -1,7 +1,5 @@
 package com.doctor.dto;
 
-import com.doctor.entity.Appointment;
-import com.doctor.entity.Feedback;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,7 +19,7 @@ public class PatientDTO {
 	private String address;
 	private String password;
 	
-	private Appointment appointment;
+//	private AppointmentDTO appointment;
 	
-	private Feedback feedback;
+	private FeedbackDTO feedback;
 }

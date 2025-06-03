@@ -17,8 +17,8 @@ public class AppointmentDTO {
 	
 //	private int appointmentId;
 
-	private Patient patient;
-	private Doctor doctor;
+	private PatientDTO patient;
+	private DoctorDTO doctor;
 	private LocalDate appointmentDate;
 	private String status;
 	private String remark;

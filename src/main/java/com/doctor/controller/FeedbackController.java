@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.doctor.dto.FeedbackDTO;
 import com.doctor.entity.Feedback;
+import com.doctor.model.FeedbackModel;
 import com.doctor.service.IFeedbackService;
 
 @RestController
@@ -21,13 +22,13 @@ public class FeedbackController {
 	
 	
 	@PostMapping("/add")
-	public ResponseEntity<FeedbackDTO> addFeedback(@RequestBody Feedback feedback) {
-		return ResponseEntity.ok(feedbackservice.addFeedback(feedback));
+	public ResponseEntity<FeedbackDTO> addFeedback(@RequestBody FeedbackModel feedbackModel) {
+		return ResponseEntity.ok(feedbackservice.addFeedback(feedbackModel));
 	}
 	
 	@GetMapping("/get")
-	public ResponseEntity<FeedbackDTO> getFeedback(@RequestBody Feedback feedback) {
-		return ResponseEntity.ok(feedbackservice.getFeedback(feedback));
+	public ResponseEntity<FeedbackDTO> getFeedback(@RequestBody FeedbackModel feedbackModel) {
+		return ResponseEntity.ok(feedbackservice.getFeedback(feedbackModel));
 	}
 	
 	

@@ -1,11 +1,13 @@
 package com.doctor.jwtutil;
 
-import java.util.Base64;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.JwtException;
@@ -23,21 +25,22 @@ public class JwtUtil {
 	private SecretKey generateKey(){
 		
 		System.out.println(secret);
-		SecretKey key=Keys.hmacShaKeyFor(Base64.getDecoder().decode(secret));
+		SecretKey key=Keys.hmacShaKeyFor(secret.getBytes());
 		return key;
 		
 	}
 	
 	
-	public String generateToken(String username) {
+	public String generateToken(UserDetails details) {
 		
+		Map<String,Object> claims= new HashMap<>();
+		claims.put("roles", details.getAuthorities());
 		
 		return Jwts.builder()
-				.claims()
-				.subject(username)
+				.subject(details.getUsername())
+				.claim("roles",claims)
 				.issuedAt(new Date(System.currentTimeMillis()))
 				.expiration(new Date(System.currentTimeMillis()+1000*60*60*2))
-				.and()
 				.signWith(generateKey())
 				.compact();
 	}

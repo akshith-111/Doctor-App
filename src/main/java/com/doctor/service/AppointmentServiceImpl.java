@@ -1,22 +1,27 @@
 package com.doctor.service;
 
 import java.time.LocalDate;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import javax.print.Doc;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
 import com.doctor.dto.AppointmentDTO;
 import com.doctor.entity.Appointment;
 import com.doctor.entity.Doctor;
 import com.doctor.entity.Patient;
 import com.doctor.entity.User;
 import com.doctor.exceptionhandling.ResourceNotFoundException;
+import com.doctor.model.AppointmentModel;
+import com.doctor.model.DoctorModel;
+import com.doctor.model.PatientModel;
 import com.doctor.repo.AppointmentRepo;
 import com.doctor.repo.DoctorRepo;
 import com.doctor.repo.PatientRepo;
@@ -38,7 +43,8 @@ public class AppointmentServiceImpl implements IAppointmentService {
 
 
   	@Override
-	public Optional<AppointmentDTO> saveAppointment(Appointment appointment) {
+	public Optional<AppointmentDTO> saveAppointment(AppointmentModel appointmentModel) {
+  		Appointment appointment =mapper.map(appointmentModel, Appointment.class);
 		User loggedUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (!(appointmentRepo.findAll().stream()
 				.anyMatch(a -> a.getPatient().getEmail().equals(loggedUser.getUsername()))))//this prevents overriding
@@ -48,8 +54,10 @@ public class AppointmentServiceImpl implements IAppointmentService {
 		{
 			Optional<Doctor> doctorOpt = doctorRepo.findById(Integer.valueOf(appointment.getDoctor().getDoctorId()));
 			Optional<Patient> patientOpt = patientRepo.findByEmail(loggedUser.getUsername());
-			appointment.setDoctor(doctorOpt.orElseThrow(()->new ResourceNotFoundException("No Data Found on This Id : "+appointment.getDoctor().getDoctorId())));
-			appointment.setPatient(patientOpt.orElseThrow(()->new ResourceNotFoundException("No Data Found on This Id : "+loggedUser.getUsername())));
+			appointment
+				.setDoctor(doctorOpt.orElseThrow(()->new ResourceNotFoundException("No Data Found on This Id : "+appointment.getDoctor().getDoctorId())));
+			appointment
+				.setPatient(patientOpt.orElseThrow(()->new ResourceNotFoundException("No Data Found on This Id : "+loggedUser.getUsername())));
 			LocalDate parsedDate = LocalDate.parse(String.valueOf(appointment.getAppointmentDate()));
 			appointment.setAppointmentDate(parsedDate);
 			appointment.setRemark(appointment.getRemark());
@@ -57,10 +65,8 @@ public class AppointmentServiceImpl implements IAppointmentService {
 			AppointmentDTO appointmentDTO= mapper.map(appointmentRepo.save(appointment),AppointmentDTO.class);
 			
 			return Optional.of(appointmentDTO);
-			//return new ResponseEntity<AppointmentDTO>(appointmentDTO,HttpStatus.OK); 
 		}
 		return Optional.empty();
-		//return new ResponseEntity<AppointmentDTO>(HttpStatus.ALREADY_REPORTED);
 	}
 
 	@Override
@@ -119,10 +125,10 @@ public class AppointmentServiceImpl implements IAppointmentService {
 	}
 
 	@Override
-	public List<AppointmentDTO> getAppointments(Doctor doctor) {
-		
+	public List<AppointmentDTO> getAppointments(DoctorModel doctorModel) {
+		Doctor doctor=mapper.map(doctorModel, Doctor.class);
 		List<Appointment> appointmentList=appointmentRepo.findByDoctor(doctor);
-		List<AppointmentDTO> dtoList=appointmentList.stream().map(a->mapper.map(a, AppointmentDTO.class)).toList();
+		List<AppointmentDTO> dtoList=appointmentList.stream().map(appointment->mapper.map(appointment, AppointmentDTO.class)).toList();
 		return dtoList;
 	}
 
@@ -136,7 +142,8 @@ public class AppointmentServiceImpl implements IAppointmentService {
 	}
 
 	@Override
-	public AppointmentDTO getAppointment(Patient patient) {
+	public AppointmentDTO getAppointment(PatientModel patientModel) {
+		Patient patient=mapper.map(patientModel, Patient.class);
 		AppointmentDTO appointmentDTO=mapper.map(appointmentRepo.findByPatient(patient),AppointmentDTO.class);
 		return appointmentDTO;
 	}

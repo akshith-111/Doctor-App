@@ -19,6 +19,7 @@ import com.doctor.entity.Feedback;
 import com.doctor.entity.Patient;
 import com.doctor.entity.User;
 import com.doctor.exceptionhandling.ResourceNotFoundException;
+import com.doctor.model.DoctorModel;
 import com.doctor.repo.AvailabilityDatesRepo;
 import com.doctor.repo.DoctorRepo;
 import com.doctor.repo.UserRepo;
@@ -47,7 +48,9 @@ public class DoctorServiceImpl implements IDoctorService {
 
 
 	@Override
-	public DoctorDTO saveDoctor(Doctor doctor) {
+	public DoctorDTO saveDoctor(DoctorModel doctorModel) {
+		Doctor doctor=mapper.map(doctorModel, Doctor.class);
+		
 		doctor.setPassword(bCryptPasswordEncoder.encode(doctor.getPassword()));
 		User user=new User();
 		user.setPassword(doctor.getPassword());
@@ -61,7 +64,9 @@ public class DoctorServiceImpl implements IDoctorService {
 	}
 
 	@Override
-	public DoctorDTO updateDoctor(Doctor doctor) {
+	public DoctorDTO updateDoctor(DoctorModel doctorModel) {
+		Doctor doctor=mapper.map(doctorModel, Doctor.class);
+		
 		Doctor actualDoctor =doctorRepo.findById(doctor.getDoctorId())
 				.orElseThrow(()->new ResourceNotFoundException("No Data Found on this Id: "+doctor.getDoctorId()));
 		doctor.setAvailabilityDates(actualDoctor.getAvailabilityDates());
@@ -81,25 +86,30 @@ public class DoctorServiceImpl implements IDoctorService {
 
 	@Override
 	@PreAuthorize("hasRole('ROLE_DOCTOR')")
-	public AvailabilityDatesDTO addAvailability(AvailabilityDates availabilityDates) {
+	public AvailabilityDatesDTO addAvailability(AvailabilityDatesDTO availabilityDatesDTO) {
+		AvailabilityDates availabilityDates=mapper.map(availabilityDatesDTO, AvailabilityDates.class);
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Doctor doctor = doctorRepo.findByEmail(user.getUsername());
 		availabilityDates.setDoctor(doctor);
 		availabilityDates= availabilityDatesRepo.save(availabilityDates);
-		AvailabilityDatesDTO availabilityDatesDTO=mapper.map(availabilityDates, AvailabilityDatesDTO.class);
+		
+		availabilityDatesDTO=mapper.map(availabilityDates, AvailabilityDatesDTO.class);
 		return availabilityDatesDTO;
 	}
 
 	@Override
 	@PreAuthorize("hasRole('ROLE_DOCTOR')")
-	public AvailabilityDatesDTO updateAvailability(AvailabilityDates availabilityDates) {
+	public AvailabilityDatesDTO updateAvailability(AvailabilityDatesDTO availabilityDatesDTO) {
+		AvailabilityDates availabilityDates=mapper.map(availabilityDatesDTO, AvailabilityDates.class);
+		
 		AvailabilityDates actualAvailabilityDates = availabilityDatesRepo
 				.findById(availabilityDates.getAvailabilityId())
 				.orElseThrow(()->new ResourceNotFoundException("No Data Found on this Id: "+availabilityDates.getAvailabilityId()));
 
 		actualAvailabilityDates.setEndDate(availabilityDates.getEndDate());
 		actualAvailabilityDates.setFromDate(availabilityDates.getFromDate());
-		AvailabilityDatesDTO availabilityDatesDTO=mapper.map(actualAvailabilityDates, AvailabilityDatesDTO.class);
+		
+		availabilityDatesDTO=mapper.map(actualAvailabilityDates, AvailabilityDatesDTO.class);
 		return availabilityDatesDTO;
 	}
 
@@ -114,7 +124,9 @@ public class DoctorServiceImpl implements IDoctorService {
 
 	@Override
 	@Transactional
-	public DoctorDTO removeDoctor(Doctor doctor) {
+	public DoctorDTO removeDoctor(DoctorModel doctorModel) {
+		Doctor doctor=mapper.map(doctorModel, Doctor.class);
+		
 		int id=doctor.getDoctorId();
 		doctor = doctorRepo.findById(id)
 				.orElseThrow(()->new ResourceNotFoundException("No Data Found on this Id: "+id));

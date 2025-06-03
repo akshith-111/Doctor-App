@@ -11,8 +11,8 @@ import com.doctor.dto.AdminDTO;
 import com.doctor.dto.DoctorDTO;
 import com.doctor.dto.PatientDTO;
 import com.doctor.entity.Admin;
-import com.doctor.entity.Doctor;
-import com.doctor.entity.Patient;
+import com.doctor.model.DoctorModel;
+import com.doctor.model.PatientModel;
 import com.doctor.service.IAdminService;
 import com.doctor.service.IDoctorService;
 import com.doctor.service.IPatientService;
@@ -37,12 +37,12 @@ public class SignUpController {
 	}
 	
 	@PostMapping("/patient")
-	public ResponseEntity<PatientDTO> patientSignUp(@RequestBody Patient patient) {
-		return ResponseEntity.ok(patientService.savePatient(patient));
+	public ResponseEntity<PatientDTO> patientSignUp(@RequestBody PatientModel patientModel) {
+		return ResponseEntity.ok(patientService.savePatient(patientModel));
 	}
 	
 	@PostMapping("/doctor")
-	public ResponseEntity<DoctorDTO> doctorSignUp(@RequestBody Doctor doctor) {
-		return ResponseEntity.ok(doctorService.saveDoctor(doctor));
+	public ResponseEntity<DoctorDTO> doctorSignUp(@RequestBody DoctorModel doctorModel) {
+		return ResponseEntity.ok(doctorService.saveDoctor(doctorModel));
 	}
 }

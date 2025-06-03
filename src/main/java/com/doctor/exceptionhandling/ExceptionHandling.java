@@ -53,7 +53,7 @@ public class ExceptionHandling {
 	}
 
 	// Global Exception Handler
-	@ExceptionHandler(Exception.class)
+	//@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorMessage> globalExceptionHandler(Exception e) {
 
 		ErrorMessage errorMessage = new ErrorMessage("Internal server error", "INTERNAL_SERVER_ERROR");

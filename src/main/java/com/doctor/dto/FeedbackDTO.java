@@ -2,6 +2,7 @@ package com.doctor.dto;
 
 import com.doctor.entity.Doctor;
 import com.doctor.entity.Patient;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,8 +15,8 @@ public class FeedbackDTO {
 //	private int feedbackId;
 	private String rating;
 	
-	private Patient patient;
+//	private PatientDTO patient;
 	
-	private Doctor doctor;
+	private DoctorDTO doctor;
 	private String feedbackComment;
 }

@@ -1,7 +1,6 @@
 package com.doctor.controller;
 
 import java.util.List;
-
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.doctor.dto.AppointmentDTO;
-import com.doctor.entity.Appointment;
-import com.doctor.entity.Patient;
+import com.doctor.model.AppointmentModel;
+import com.doctor.model.PatientModel;
 import com.doctor.service.IAppointmentService;
 
 
@@ -33,7 +32,7 @@ public class AppointmentController {
 
 	@PostMapping("/appointment")
 	@PreAuthorize("hasRole('ROLE_PATIENT')")
-	public ResponseEntity<AppointmentDTO> appointment(@RequestBody Appointment appointment) {
+	public ResponseEntity<AppointmentDTO> appointment(@RequestBody AppointmentModel appointment) {
 		
 		return appointmentService.saveAppointment(appointment)
 				.map(ResponseEntity::ok)
@@ -62,7 +61,7 @@ public class AppointmentController {
 	
 	@GetMapping("/appointmentbypatient")
 	@PreAuthorize("hasRole('ROLE_PATIENT')")
-	public ResponseEntity<AppointmentDTO> oneAppointment(@RequestBody Patient patient){
+	public ResponseEntity<AppointmentDTO> oneAppointment(@RequestBody PatientModel patient){
 		return ResponseEntity.ok(appointmentService.getAppointment(patient));
 	}
 	

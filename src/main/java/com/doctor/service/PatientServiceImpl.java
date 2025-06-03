@@ -1,7 +1,7 @@
 package com.doctor.service;
 
+import java.awt.MenuComponent;
 import java.time.LocalDate;
-
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +15,8 @@ import com.doctor.entity.Doctor;
 import com.doctor.entity.Feedback;
 import com.doctor.entity.Patient;
 import com.doctor.entity.User;
+import com.doctor.model.DoctorModel;
+import com.doctor.model.PatientModel;
 import com.doctor.repo.AppointmentRepo;
 import com.doctor.repo.PatientRepo;
 import com.doctor.repo.UserRepo;
@@ -37,7 +39,9 @@ public class PatientServiceImpl implements IPatientService {
 	private final ModelMapper mapper;
 
 	@Override
-	public PatientDTO savePatient(Patient patient) {
+	public PatientDTO savePatient(PatientModel patientModel) {
+		Patient patient=mapper.map(patientModel, Patient.class);
+		
 		patient.setPassword(bCryptPasswordEncoder.encode(patient.getPassword()));
 		User user=new User();
 		user.setPassword(patient.getPassword());
@@ -50,7 +54,9 @@ public class PatientServiceImpl implements IPatientService {
 	}
 
 	@Override
-	public PatientDTO updatePatient(Patient patient) {
+	public PatientDTO updatePatient(PatientModel patientModel) {
+		Patient patient=mapper.map(patientModel, Patient.class);
+		
 		Patient actualPatient=patientRepo.findById(patient.getPatientId()).orElseThrow();
 		patient.setAppointment(actualPatient.getAppointment());
 		patient.setFeedback(actualPatient.getFeedback());
@@ -61,7 +67,8 @@ public class PatientServiceImpl implements IPatientService {
 
 	@Override
 	@Transactional
-	public PatientDTO removePatient(Patient patient) {
+	public PatientDTO removePatient(PatientModel patientModel) {
+		Patient patient=mapper.map(patientModel, Patient.class);
 
 		patient = patientRepo.findById(patient.getPatientId()).get();
 		userRepo.delete((User) userRepo.findByUsername(patient.getEmail()));
@@ -91,7 +98,9 @@ public class PatientServiceImpl implements IPatientService {
 	}
 
 	@Override
-	public PatientDTO getPatient(Patient patient) {
+	public PatientDTO getPatient(PatientModel patientModel) {
+		Patient patient=mapper.map(patientModel, Patient.class);
+		
 		patient = patientRepo.findById(patient.getPatientId()).orElseThrow();
 		PatientDTO patientDTO=mapper.map(patient, PatientDTO.class);
 		return patientDTO;
@@ -106,8 +115,9 @@ public class PatientServiceImpl implements IPatientService {
 	}
 
 	@Override
-	public List<PatientDTO> getPatientListByDoctor(Doctor doctor) {
-			
+	public List<PatientDTO> getPatientListByDoctor(DoctorModel doctorModel) {
+		Doctor doctor=mapper.map(doctorModel, Doctor.class);
+		
 		List<Appointment> appointmentList =appointmentRepo.findByDoctor(doctor);
 		List<PatientDTO> patientDto= appointmentList.stream().map(a->mapper.map(a.getPatient(), PatientDTO.class)).toList();
 					

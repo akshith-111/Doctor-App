@@ -20,7 +20,7 @@ public class FeedbackModel {
 
 private String rating;
 	
-	private Patient patient;
-	private Doctor doctor;
+	private PatientModel patient;
+	private DoctorModel doctor;
 	private String feedbackComment;
 }

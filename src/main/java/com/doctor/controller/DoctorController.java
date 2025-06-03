@@ -19,8 +19,8 @@ import com.doctor.dto.AvailabilityDatesDTO;
 import com.doctor.dto.DoctorDTO;
 import com.doctor.dto.FeedbackDTO;
 import com.doctor.dto.PatientDTO;
-import com.doctor.entity.AvailabilityDates;
 import com.doctor.entity.Doctor;
+import com.doctor.model.DoctorModel;
 import com.doctor.service.IAppointmentService;
 import com.doctor.service.IDoctorService;
 import com.doctor.service.IFeedbackService;
@@ -42,34 +42,34 @@ public class DoctorController {
 
 	@PostMapping("/doctor/availabilitydates")
 	public ResponseEntity<AvailabilityDatesDTO> addAvalilabilityDates(
-			@RequestBody AvailabilityDates availabilityDates) {
+			@RequestBody AvailabilityDatesDTO availabilityDatesDTO) {
 
-		return ResponseEntity.ok(doctorService.addAvailability(availabilityDates));
+		return ResponseEntity.ok(doctorService.addAvailability(availabilityDatesDTO));
 	}
 
 	@PutMapping("doctor/updatedates")
 	public ResponseEntity<AvailabilityDatesDTO> updateAvaolabilityDates(
-			@RequestBody AvailabilityDates availabilityDates) {
+			@RequestBody AvailabilityDatesDTO availabilityDatesDTO) {
 
-		return ResponseEntity.ok(doctorService.updateAvailability(availabilityDates));
+		return ResponseEntity.ok(doctorService.updateAvailability(availabilityDatesDTO));
 	}
 
 	@GetMapping("doctor/appointmentsbydoctor")
-	public ResponseEntity<List<AppointmentDTO>> appointmentsByDoctor(@RequestBody Doctor doctor) {
+	public ResponseEntity<List<AppointmentDTO>> appointmentsByDoctor(@RequestBody DoctorModel doctorModel) {
 
-		return ResponseEntity.ok(appointmentService.getAppointments(doctor));
+		return ResponseEntity.ok(appointmentService.getAppointments(doctorModel));
 	}
 
 	@GetMapping("doctor/patientsbydoctor")
-	public ResponseEntity<List<PatientDTO>> patientsByDoctor(@RequestBody Doctor doctor) {
+	public ResponseEntity<List<PatientDTO>> patientsByDoctor(@RequestBody DoctorModel doctorModel) {
 
-		return ResponseEntity.ok(patientService.getPatientListByDoctor(doctor));
+		return ResponseEntity.ok(patientService.getPatientListByDoctor(doctorModel));
 	}
 	
 	@GetMapping("doctor/feedbacksbydoctor")
-	public ResponseEntity<List<FeedbackDTO>> feedbacksByDoctor(@RequestBody Doctor doctor) {
+	public ResponseEntity<List<FeedbackDTO>> feedbacksByDoctor(@RequestBody DoctorModel doctorModel) {
 
-		return ResponseEntity.ok(feedbackService.getAllFeedbacks(doctor));
+		return ResponseEntity.ok(feedbackService.getAllFeedbacks(doctorModel));
 	}
 	
 	@PatchMapping("doctor/updatestatus")
@@ -82,9 +82,9 @@ public class DoctorController {
 
 	//Admin operations
 	@PostMapping("admin/adddoctor")
-	public ResponseEntity<DoctorDTO> addDoctor(@RequestBody Doctor doctor) {
+	public ResponseEntity<DoctorDTO> addDoctor(@RequestBody DoctorModel doctorModel) {
 
-		return ResponseEntity.ok(doctorService.saveDoctor(doctor));
+		return ResponseEntity.ok(doctorService.saveDoctor(doctorModel));
 	}
 	
 	@GetMapping("getdoctor/{id}")
@@ -98,15 +98,15 @@ public class DoctorController {
 	}
 	
 	@DeleteMapping("admin/removedoctor")
-	public ResponseEntity<DoctorDTO> deleteDoctor(@RequestBody Doctor doctor) {
+	public ResponseEntity<DoctorDTO> deleteDoctor(@RequestBody DoctorModel doctorModel) {
 
-		return ResponseEntity.ok(doctorService.removeDoctor(doctor));
+		return ResponseEntity.ok(doctorService.removeDoctor(doctorModel));
 	}
 	
 	@PutMapping("admin/modifydoctor")
-	public ResponseEntity<DoctorDTO> modifyPatient(@RequestBody Doctor doctor) {
+	public ResponseEntity<DoctorDTO> modifyPatient(@RequestBody DoctorModel doctorModel) {
 
-		return ResponseEntity.ok(doctorService.updateDoctor(doctor));
+		return ResponseEntity.ok(doctorService.updateDoctor(doctorModel));
 	}
 	
 	

@@ -22,7 +22,7 @@ public class PatientModel {
 	private String age;
 	private String address;
 	private String password;
-	private Appointment appointment;
-	private Feedback feedback;
+	private AppointmentModel appointment;
+	private FeedbackModel feedback;
 
 }

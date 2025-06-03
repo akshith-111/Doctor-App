@@ -24,10 +24,10 @@ public class DoctorDTO {
 	private String password;
 	private String chargedPerVisit;
 	
-	private List<Appointment> appointments;
+//	private List<AppointmentDTO> appointments;
 	
-	private Feedback feedback;
+	private FeedbackDTO feedback;
 	
-	private AvailabilityDates availabilityDates;
+	private AvailabilityDatesDTO availabilityDates;
 
 }

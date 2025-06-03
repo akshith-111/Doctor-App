@@ -19,7 +19,7 @@ public class AvailabilityDatesDTO {
 
 	
 //	private int availabilityId;
-	private Doctor doctor;
+//	private DoctorDTO doctor;
 	private Date fromDate;
 	private Date endDate;
 }

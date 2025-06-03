@@ -6,13 +6,14 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.doctor.dto.FeedbackDTO;
-import com.doctor.entity.Doctor;
 import com.doctor.entity.Feedback;
+import com.doctor.model.DoctorModel;
+import com.doctor.model.FeedbackModel;
 
 @Service
 public interface IFeedbackService {
-	public FeedbackDTO addFeedback(Feedback feedback);
-	public FeedbackDTO getFeedback(Feedback feedback);
-	public List<FeedbackDTO> getAllFeedbacks(Doctor doctor);
+	public FeedbackDTO addFeedback(FeedbackModel feedbackModel);
+	public FeedbackDTO getFeedback(FeedbackModel feedbackModel);
+	public List<FeedbackDTO> getAllFeedbacks(DoctorModel doctorModel);
 
 }
