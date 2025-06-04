@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AppointmentModel {
 
+	private int appointmentId;
 	private PatientModel patient;	
 	private DoctorModel doctor;
 	private LocalDate appointmentDate;

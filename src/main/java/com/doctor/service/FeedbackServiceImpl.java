@@ -45,10 +45,10 @@ public class FeedbackServiceImpl implements IFeedbackService {
 	}
 
 	@Override
-	public FeedbackDTO getFeedback(FeedbackModel feedbackModel) {
-		Feedback feedback=modelMapper.map(feedbackModel, Feedback.class);
+	public FeedbackDTO getFeedback(int id) {
 		
-		feedback= feedbackRepo.findById(feedback.getFeedbackId()).get();
+		
+		Feedback feedback= feedbackRepo.findById(id).get();
 		FeedbackDTO feedbackDTO=modelMapper.map(feedback, FeedbackDTO.class);
 		return feedbackDTO;
 	}

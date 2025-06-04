@@ -2,10 +2,6 @@ package com.doctor.dto;
 
 import java.util.List;
 
-import com.doctor.entity.Appointment;
-import com.doctor.entity.AvailabilityDates;
-import com.doctor.entity.Feedback;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,12 +17,11 @@ public class DoctorDTO {
 	private String hospitalName;
 	private String mobileNo;
 	private String email;
-	private String password;
 	private String chargedPerVisit;
 	
-//	private List<AppointmentDTO> appointments;
+	private List<SimpleAppointmentDTO> appointments;
 	
-	private FeedbackDTO feedback;
+	private List<SimpleFeedbackDTO> feedback;
 	
 	private AvailabilityDatesDTO availabilityDates;
 

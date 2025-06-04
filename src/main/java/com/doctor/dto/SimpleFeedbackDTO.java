@@ -1,9 +1,5 @@
 package com.doctor.dto;
 
-import java.util.Date;
-
-import org.springframework.stereotype.Component;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,10 +7,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Component
-public class AvailabilityDatesDTO {
+public class SimpleFeedbackDTO {
+
+	private String rating;
+
+	private int patientId;
 
 	private int doctorId;
-	private Date fromDate;
-	private Date endDate;
+	private String feedbackComment;
+
 }

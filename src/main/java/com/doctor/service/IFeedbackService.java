@@ -13,7 +13,7 @@ import com.doctor.model.FeedbackModel;
 @Service
 public interface IFeedbackService {
 	public FeedbackDTO addFeedback(FeedbackModel feedbackModel);
-	public FeedbackDTO getFeedback(FeedbackModel feedbackModel);
+	public FeedbackDTO getFeedback(int id);
 	public List<FeedbackDTO> getAllFeedbacks(DoctorModel doctorModel);
 
 }

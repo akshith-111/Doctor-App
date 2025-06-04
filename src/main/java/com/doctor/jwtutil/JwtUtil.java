@@ -1,9 +1,12 @@
 package com.doctor.jwtutil;
 
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -20,12 +23,24 @@ public class JwtUtil {
 	@Value("${jwt.secret}")
 	private String secret;
 	
+//	private String secret;
 //	private byte[] secretkey=Jwts.SIG.HS256.key().build().getEncoded();
 //	String secret=Base64.getEncoder().encodeToString(secretkey);//store the secret key
+	
+//	public String getSerectKey() throws NoSuchAlgorithmException {
+//		KeyGenerator keyGen= KeyGenerator.getInstance("HmacSHA256");
+//		SecretKey secretKey=keyGen.generateKey();
+//		secret=Base64.getEncoder().encodeToString(secretKey.getEncoded());
+//		System.out.println(secret);
+//		return secret;
+//	}
+//	
+	
 	private SecretKey generateKey(){
 		
 		System.out.println(secret);
-		SecretKey key=Keys.hmacShaKeyFor(secret.getBytes());
+		
+		SecretKey key=Keys.hmacShaKeyFor(Base64.getDecoder().decode(secret.getBytes()));
 		return key;
 		
 	}

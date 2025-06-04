@@ -34,9 +34,9 @@ public class SecurityConfig {
 	public SecurityFilterChain chain(HttpSecurity http) throws Exception {
 
 		http.csrf(csrf -> csrf.disable()).authorizeHttpRequests(auth -> auth.requestMatchers("/signup/*","/login").permitAll()
-				//.requestMatchers("/admin/*/*").hasAuthority("ROLE_ADMIN")
-				//.requestMatchers("/doctor/*/*").hasAuthority("ROLE_DOCTOR")
-				//.requestMatchers("/patient/*/*").hasAuthority("ROLE_PATIENT")
+				.requestMatchers("/admin/*/*").hasAuthority("ROLE_ADMIN")
+				.requestMatchers("/doctor/*/*").hasAuthority("ROLE_DOCTOR")
+				.requestMatchers("/patient/*/*").hasAuthority("ROLE_PATIENT")
 				.anyRequest().authenticated())
 		.sessionManagement(sess->sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.addFilterBefore(jwtFilter,UsernamePasswordAuthenticationFilter.class);

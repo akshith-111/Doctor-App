@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AppointmentDTO {
-	
-//	private int appointmentId;
+public class SimpleAppointmentDTO {
 
 	private MiniPatientDTO patient;
 	private MiniDoctorDTO doctor;

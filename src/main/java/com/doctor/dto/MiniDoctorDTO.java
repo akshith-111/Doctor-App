@@ -1,10 +1,8 @@
-package com.doctor.model;
+package com.doctor.dto;
 
 import java.util.List;
 
 import org.springframework.stereotype.Component;
-
-import com.doctor.dto.AvailabilityDatesDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,20 +12,17 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DoctorModel {
+public class MiniDoctorDTO {
 
-	private int doctorId;
 	private String doctorName;
 	private String speciality;
 	private String hospitalName;
 	private String mobileNo;
 	private String email;
-	private String password;
 	private String chargedPerVisit;
 	
-	private List<AppointmentModel> appointments;
+
+//	private List<FeedbackDTO> feedback;
 	
-	private FeedbackModel feedback;
-	
-	private AvailabilityDatesDTO availabilityDates;
+//	private AvailabilityDatesDTO availabilityDates;
 }

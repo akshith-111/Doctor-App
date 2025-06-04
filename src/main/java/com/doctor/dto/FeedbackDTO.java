@@ -15,8 +15,8 @@ public class FeedbackDTO {
 //	private int feedbackId;
 	private String rating;
 	
-//	private PatientDTO patient;
+	private MiniPatientDTO patient;
 	
-	private DoctorDTO doctor;
+	private MiniDoctorDTO doctor;
 	private String feedbackComment;
 }

@@ -20,7 +20,7 @@ public interface IPatientService {
 	
 	public PatientDTO removePatient(PatientModel patientModel);
 	
-	public PatientDTO getPatient(PatientModel patientModel);
+	public PatientDTO getPatient(int id);
 	
 	public List<PatientDTO> getAllPatients();
 	

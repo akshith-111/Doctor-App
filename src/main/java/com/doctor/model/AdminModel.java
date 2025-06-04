@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AdminModel {
 
+	private int adminId;
 	private String adminName;
 	private String contactNumber;
 	private String email;

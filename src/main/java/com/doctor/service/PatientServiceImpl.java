@@ -1,11 +1,11 @@
 package com.doctor.service;
 
-import java.awt.MenuComponent;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +17,7 @@ import com.doctor.entity.Patient;
 import com.doctor.entity.User;
 import com.doctor.model.DoctorModel;
 import com.doctor.model.PatientModel;
+import com.doctor.modelmapping.MappingConverter;
 import com.doctor.repo.AppointmentRepo;
 import com.doctor.repo.PatientRepo;
 import com.doctor.repo.UserRepo;
@@ -37,6 +38,8 @@ public class PatientServiceImpl implements IPatientService {
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	private final ModelMapper mapper;
+	
+	private final MappingConverter converter=new MappingConverter();
 
 	@Override
 	public PatientDTO savePatient(PatientModel patientModel) {
@@ -61,7 +64,11 @@ public class PatientServiceImpl implements IPatientService {
 		patient.setAppointment(actualPatient.getAppointment());
 		patient.setFeedback(actualPatient.getFeedback());
 		patient=patientRepo.save(patient);
+		
+		
 		PatientDTO patientDto=mapper.map(patient, PatientDTO.class);
+		//PatientDTO patientDto=new PatientDTO(patient.getPatientName(),patient.getMobileNo(),patient.getEmail(),patient.getBloodGroup(),patient.getAge(),patient.getAddress(),new SimpleAppointmentDTO(),patient.getFeedback());
+
 		return patientDto;
 	}
 
@@ -98,10 +105,10 @@ public class PatientServiceImpl implements IPatientService {
 	}
 
 	@Override
-	public PatientDTO getPatient(PatientModel patientModel) {
-		Patient patient=mapper.map(patientModel, Patient.class);
-		
-		patient = patientRepo.findById(patient.getPatientId()).orElseThrow();
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public PatientDTO getPatient(int id) {
+				
+		Patient patient = patientRepo.findById(id).orElseThrow();
 		PatientDTO patientDTO=mapper.map(patient, PatientDTO.class);
 		return patientDTO;
 	}

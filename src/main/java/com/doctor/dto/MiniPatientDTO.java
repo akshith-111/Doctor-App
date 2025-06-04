@@ -1,9 +1,6 @@
-package com.doctor.model;
+package com.doctor.dto;
 
 import org.springframework.stereotype.Component;
-
-import com.doctor.entity.Appointment;
-import com.doctor.entity.Feedback;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,17 +10,14 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PatientModel {
+public class MiniPatientDTO {
 
-	private int patientId;
 	private String patientName;
 	private String mobileNo;
 	private String email;
 	private String bloodGroup;
 	private String age;
 	private String address;
-	private String password;
-	private AppointmentModel appointment;
-	private FeedbackModel feedback;
-
+	
+	//private FeedbackDTO feedback;
 }

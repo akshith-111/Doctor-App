@@ -1,8 +1,6 @@
 package com.doctor.service;
 
 import java.util.List;
-
-
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
@@ -15,6 +13,7 @@ import com.doctor.dto.AdminDTO;
 import com.doctor.entity.Admin;
 import com.doctor.entity.User;
 import com.doctor.exceptionhandling.ResourceNotFoundException;
+import com.doctor.model.AdminModel;
 import com.doctor.repo.AdminRepo;
 import com.doctor.repo.UserRepo;
 
@@ -47,12 +46,12 @@ public class AdminServiceImpl implements IAdminService {
 		return adminDTO;
 	}
 
-
-	@Override
-	public Admin udpateAdmin(Admin admin) {
-			
-		return adminRepo.save(admin);
-	}
+//
+//	@Override
+//	public AdminDTO udpateAdmin(AdminModel adminModel) {
+//		
+//		return adminRepo.save(admin);
+//	}
 
 
 	@Override
@@ -85,6 +84,12 @@ public class AdminServiceImpl implements IAdminService {
 		List<Admin> list= adminRepo.findAll();
 		List<AdminDTO> dtoList=list.stream().map(a->modelMapper.map(a, AdminDTO.class)).toList();
 		return new ResponseEntity<List<AdminDTO>>(dtoList,HttpStatus.OK);
+	}
+
+	@Override
+	public Admin udpateAdmin(Admin admin) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

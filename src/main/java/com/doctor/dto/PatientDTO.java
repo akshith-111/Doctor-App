@@ -17,9 +17,8 @@ public class PatientDTO {
 	private String bloodGroup;
 	private String age;
 	private String address;
-	private String password;
 	
-//	private AppointmentDTO appointment;
+	private SimpleAppointmentDTO appointment;
 	
 	private FeedbackDTO feedback;
 }

@@ -69,8 +69,10 @@ public class DoctorServiceImpl implements IDoctorService {
 		
 		Doctor actualDoctor =doctorRepo.findById(doctor.getDoctorId())
 				.orElseThrow(()->new ResourceNotFoundException("No Data Found on this Id: "+doctor.getDoctorId()));
+		doctor.setAppointments(actualDoctor.getAppointments());
 		doctor.setAvailabilityDates(actualDoctor.getAvailabilityDates());
 		doctor.setFeedback(actualDoctor.getFeedback());
+		System.out.println(doctor.getAppointments().get(0).getAppointmentId());
 		doctorRepo.save(doctor);
 		DoctorDTO doctorDTO=mapper.map(doctor,DoctorDTO.class);
 		return doctorDTO;
@@ -119,6 +121,7 @@ public class DoctorServiceImpl implements IDoctorService {
 		Doctor doctor = doctorRepo.findById(id)
 				.orElseThrow(()->new ResourceNotFoundException("No Data Found on this Id: "+id));
 		DoctorDTO doctorDTO=mapper.map(doctor, DoctorDTO.class);
+		//System.out.println(doctor.getFeedback().get(0));
 		return new ResponseEntity<DoctorDTO>(doctorDTO,HttpStatus.OK);
 	}
 

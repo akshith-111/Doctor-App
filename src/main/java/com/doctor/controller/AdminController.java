@@ -6,14 +6,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.doctor.dto.AdminDTO;
+import com.doctor.model.DoctorModel;
 import com.doctor.service.IAdminService;
 import com.doctor.service.IAppointmentService;
+import com.doctor.service.IDoctorService;
 
 import lombok.RequiredArgsConstructor;
+
 
 @RestController
 @RequestMapping("/admin")
