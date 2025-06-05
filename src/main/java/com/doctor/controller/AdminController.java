@@ -46,8 +46,8 @@ public class AdminController {
 	//status
 	@GetMapping("status/{id}")
 	public ResponseEntity<String> getAppointmentStatus(@PathVariable int id) {
-		String status=appointmentService.getAppointment(id).getBody().getStatus();
-		return new ResponseEntity<String>(status,HttpStatus.OK);
+		String status=appointmentService.getAppointment(id).getStatus();
+		return ResponseEntity.ok(status);
 	}
 	
 

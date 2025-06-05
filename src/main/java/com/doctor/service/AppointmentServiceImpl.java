@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
+import com.doctor.controller.LoginController;
 import com.doctor.dto.AppointmentDTO;
 import com.doctor.entity.Appointment;
 import com.doctor.entity.Doctor;
@@ -22,6 +22,7 @@ import com.doctor.exceptionhandling.ResourceNotFoundException;
 import com.doctor.model.AppointmentModel;
 import com.doctor.model.DoctorModel;
 import com.doctor.model.PatientModel;
+import com.doctor.model.UserModel;
 import com.doctor.repo.AppointmentRepo;
 import com.doctor.repo.DoctorRepo;
 import com.doctor.repo.PatientRepo;
@@ -32,7 +33,8 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class AppointmentServiceImpl implements IAppointmentService {
 
-    
+   
+  
 	private final AppointmentRepo appointmentRepo;
 
 	private final DoctorRepo doctorRepo;
@@ -40,7 +42,6 @@ public class AppointmentServiceImpl implements IAppointmentService {
 	private final PatientRepo patientRepo;
 	
 	private final ModelMapper mapper;
-
 
   	@Override
 	public Optional<AppointmentDTO> saveAppointment(AppointmentModel appointmentModel) {
@@ -70,23 +71,23 @@ public class AppointmentServiceImpl implements IAppointmentService {
 	}
 
 	@Override
-	public ResponseEntity<List<AppointmentDTO>> getAllAppointments() {
+	public List<AppointmentDTO> getAllAppointments() {
 		
 		List<Appointment> li=appointmentRepo.findAll();
 		List<AppointmentDTO> dtoList= li.stream().map(a->mapper.map(a, AppointmentDTO.class)).toList();
-		return new ResponseEntity<List<AppointmentDTO>>(dtoList,HttpStatus.OK);
+		return dtoList;
 	}
 
 	@Override
-	public ResponseEntity<AppointmentDTO> getAppointment(int appointmentId) {
+	public AppointmentDTO getAppointment(int appointmentId) {
 		
 		Appointment app= appointmentRepo.findById(appointmentId).orElseThrow(()->new ResourceNotFoundException("No Data Found on This Id : "+appointmentId));
 		AppointmentDTO appointmentDto=mapper.map(app, AppointmentDTO.class);
-		return new ResponseEntity<AppointmentDTO>(appointmentDto,HttpStatus.OK);
+		return appointmentDto;
 	}
 
 	@Override
-	public ResponseEntity<AppointmentDTO> deleteAppointment(int appointmentId) {
+	public AppointmentDTO deleteAppointment(int appointmentId) {
 		Appointment appointment= appointmentRepo.findById(appointmentId).orElseThrow(()->new ResourceNotFoundException("No Data Found on This Id : "+appointmentId));
 		List<Appointment> list= appointment.getDoctor().getAppointments();
 		Appointment appointmentToBeRemoved= list.stream().filter(a->a.getAppointmentId()==appointmentId).toList().get(0);
@@ -94,13 +95,17 @@ public class AppointmentServiceImpl implements IAppointmentService {
 		appointment.getPatient().setAppointment(null);
 		appointmentRepo.deleteById(appointmentId);
 		AppointmentDTO appointmentDTO =mapper.map(appointment, AppointmentDTO.class);
-		return new ResponseEntity<AppointmentDTO>(appointmentDTO,HttpStatus.OK);
+		return appointmentDTO;
 	}
 
 	@Override
-	public ResponseEntity<AppointmentDTO> updateAppointment(Map<String,Object> updates) {
+	public Optional<AppointmentDTO> updateAppointment(Map<String,Object> updates) {
 		Appointment actualAppointment=appointmentRepo.findById(Integer.valueOf(String.valueOf(updates.get("appointmentId")))).orElseThrow(()->new ResourceNotFoundException("No Data Found on This Id : "+updates.get("appointmentId")));
 		
+		User loggedInuser=(User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if(actualAppointment.getDoctor().getEmail().equals(loggedInuser.getUsername())||loggedInuser.getRole().equals("ADMIN")) {
+			
+		System.out.println("doctor: "+actualAppointment.getDoctor().getEmail()+" LoggedUser :"+loggedInuser.getUsername());
 		if(updates.containsKey("status"))
 			actualAppointment.setStatus(String.valueOf(updates.get("status")));
 		if(updates.containsKey("remark")) {
@@ -117,8 +122,12 @@ public class AppointmentServiceImpl implements IAppointmentService {
 		AppointmentDTO appointmentDTO= mapper.map(appointment, AppointmentDTO.class);
 		
 		
-		return new ResponseEntity<AppointmentDTO>(appointmentDTO,HttpStatus.OK) ;
+		return Optional.of(appointmentDTO);
+		}
+		return Optional.empty();
 	}
+	
+	
 	public Appointment acceptAppointment(Appointment appointment) {
 		
 		return appointmentRepo.save(appointment);

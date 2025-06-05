@@ -18,7 +18,7 @@ public interface IDoctorService {
 	public AvailabilityDatesDTO addAvailability(AvailabilityDatesDTO availabilityDatesDTO);
 	public AvailabilityDatesDTO updateAvailability(AvailabilityDatesDTO availabilityDatesDTO);
 //	public ResponseEntity<DoctorDTO> getDoctor(Doctor doctor);
-	public DoctorDTO removeDoctor(DoctorModel doctorModel);
+	public DoctorDTO removeDoctor(int id);
 	public List<DoctorDTO> getDoctorListBySpeciality(String speciality);
 	public ResponseEntity<DoctorDTO> getDoctor(int id);
 

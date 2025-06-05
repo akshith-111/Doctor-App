@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,6 +21,8 @@ import com.doctor.model.AppointmentModel;
 import com.doctor.model.PatientModel;
 import com.doctor.service.IAppointmentService;
 
+import jakarta.validation.Valid;
+
 
 
 @RestController
@@ -32,7 +35,7 @@ public class AppointmentController {
 
 	@PostMapping("/appointment")
 	@PreAuthorize("hasRole('ROLE_PATIENT')")
-	public ResponseEntity<AppointmentDTO> appointment(@RequestBody AppointmentModel appointment) {
+	public ResponseEntity<AppointmentDTO> appointment(@Valid @RequestBody AppointmentModel appointment) {
 		
 		return appointmentService.saveAppointment(appointment)
 				.map(ResponseEntity::ok)
@@ -43,35 +46,37 @@ public class AppointmentController {
 	@GetMapping("/appointment")
 	public ResponseEntity<List<AppointmentDTO>> appointments(){
 		
-		return appointmentService.getAllAppointments();
+		return ResponseEntity.ok(appointmentService.getAllAppointments());
 		
 	}
 	
 	@GetMapping("/appointment/{id}")
 	public ResponseEntity<AppointmentDTO> oneAppointment(@PathVariable int id) {
-		return appointmentService.getAppointment(id);
+		return ResponseEntity.ok(appointmentService.getAppointment(id));
 	}
 	
 	
 	@DeleteMapping("/appointment/{id}")
 	public ResponseEntity<AppointmentDTO> deleteAppointment(@PathVariable int id) {
-		return appointmentService.deleteAppointment(id);
+		return ResponseEntity.ok(appointmentService.deleteAppointment(id));
 	}
 	
 	
 	@GetMapping("/appointmentbypatient")
 	@PreAuthorize("hasRole('ROLE_PATIENT')")
-	public ResponseEntity<AppointmentDTO> oneAppointment(@RequestBody PatientModel patient){
+	public ResponseEntity<AppointmentDTO> oneAppointment(@Valid @RequestBody PatientModel patient){
 		return ResponseEntity.ok(appointmentService.getAppointment(patient));
 	}
 	
 	
 
 	@PatchMapping("admin/updatestatus")
-	public ResponseEntity<String> updateAppointment(@RequestBody Map<String, Object> updates) {
+	public ResponseEntity<AppointmentDTO> updateAppointment(@RequestBody Map<String, Object> updates) {
 
-		String status= appointmentService.updateAppointment(updates).getBody().getStatus();
-		return new ResponseEntity<String>(status,HttpStatus.OK);
+								
+		return appointmentService.updateAppointment(updates)
+				.map(ResponseEntity::ok)
+					.orElse(ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build());
 	}
 	
 	

@@ -21,13 +21,13 @@ public interface IAppointmentService {
 
 	Optional<AppointmentDTO> saveAppointment(AppointmentModel appointmentModel);
 	
-	ResponseEntity<List<AppointmentDTO>> getAllAppointments();
+	List<AppointmentDTO> getAllAppointments();
 	
-	ResponseEntity<AppointmentDTO> getAppointment(int AppointmentId);
+	AppointmentDTO getAppointment(int AppointmentId);
 	
-	ResponseEntity<AppointmentDTO> deleteAppointment(int AppointmentId);
+	AppointmentDTO deleteAppointment(int AppointmentId);
 	
-	ResponseEntity<AppointmentDTO> updateAppointment(Map<String, Object> updates);
+	Optional<AppointmentDTO> updateAppointment(Map<String, Object> updates);
 	
 	List<AppointmentDTO> getAppointments(DoctorModel doctorModel);
 	

@@ -1,23 +1,23 @@
 package com.doctor.service;
 
 import java.time.LocalDate;
+
 import java.util.List;
 import java.util.Map;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import com.doctor.DoctorAppApplication;
 import com.doctor.dto.PatientDTO;
 import com.doctor.entity.Appointment;
 import com.doctor.entity.Doctor;
 import com.doctor.entity.Feedback;
 import com.doctor.entity.Patient;
 import com.doctor.entity.User;
+import com.doctor.exceptionhandling.ResourceNotFoundException;
 import com.doctor.model.DoctorModel;
 import com.doctor.model.PatientModel;
-import com.doctor.modelmapping.MappingConverter;
 import com.doctor.repo.AppointmentRepo;
 import com.doctor.repo.PatientRepo;
 import com.doctor.repo.UserRepo;
@@ -29,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PatientServiceImpl implements IPatientService {
 
+
 	private final AppointmentRepo appointmentRepo;
 	
 	private final PatientRepo patientRepo;
@@ -38,8 +39,7 @@ public class PatientServiceImpl implements IPatientService {
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	private final ModelMapper mapper;
-	
-	private final MappingConverter converter=new MappingConverter();
+
 
 	@Override
 	public PatientDTO savePatient(PatientModel patientModel) {
@@ -65,20 +65,18 @@ public class PatientServiceImpl implements IPatientService {
 		patient.setFeedback(actualPatient.getFeedback());
 		patient=patientRepo.save(patient);
 		
-		
 		PatientDTO patientDto=mapper.map(patient, PatientDTO.class);
-		//PatientDTO patientDto=new PatientDTO(patient.getPatientName(),patient.getMobileNo(),patient.getEmail(),patient.getBloodGroup(),patient.getAge(),patient.getAddress(),new SimpleAppointmentDTO(),patient.getFeedback());
-
 		return patientDto;
 	}
 
 	@Override
 	@Transactional
-	public PatientDTO removePatient(PatientModel patientModel) {
-		Patient patient=mapper.map(patientModel, Patient.class);
-
-		patient = patientRepo.findById(patient.getPatientId()).get();
+	public PatientDTO removePatient(int id) {
+		System.out.println("Entered........");
+		Patient patient = patientRepo.findById(id).orElseThrow(()->new ResourceNotFoundException("No Data Found With id : "+id));
+		System.out.println(patient.getEmail());
 		userRepo.delete((User) userRepo.findByUsername(patient.getEmail()));
+		patient.getAppointment();
 
 		Appointment appointment = patient.getAppointment();
 		Feedback feedback = patient.getFeedback();
@@ -97,8 +95,9 @@ public class PatientServiceImpl implements IPatientService {
 			feedback.setDoctor(null);
 		}
 		
-
+		System.out.println("About to Delete");
 		patientRepo.deleteById(patient.getPatientId());
+		System.out.println("DELETED");
 		PatientDTO patientDTO=mapper.map(patient, PatientDTO.class);
 		return patientDTO;
 

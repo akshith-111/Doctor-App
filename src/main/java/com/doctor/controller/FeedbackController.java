@@ -14,6 +14,7 @@ import com.doctor.entity.Feedback;
 import com.doctor.model.FeedbackModel;
 import com.doctor.service.IFeedbackService;
 
+import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
 
 @RestController
@@ -25,7 +26,7 @@ public class FeedbackController {
 	
 	
 	@PostMapping("/add")
-	public ResponseEntity<FeedbackDTO> addFeedback(@RequestBody FeedbackModel feedbackModel) {
+	public ResponseEntity<FeedbackDTO> addFeedback(@Valid @RequestBody FeedbackModel feedbackModel) {
 		return ResponseEntity.ok(feedbackservice.addFeedback(feedbackModel));
 	}
 	

@@ -2,12 +2,11 @@ package com.doctor.model;
 
 import java.time.LocalDate;
 
+import org.hibernate.validator.constraints.Length;
 import org.springframework.stereotype.Component;
 
-import com.doctor.entity.Appointment;
-import com.doctor.entity.Doctor;
-import com.doctor.entity.Patient;
-
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,9 +18,13 @@ import lombok.NoArgsConstructor;
 public class AppointmentModel {
 
 	private int appointmentId;
-	private PatientModel patient;	
+	@Valid
+	private PatientModel patient;
+	@Valid
 	private DoctorModel doctor;
 	private LocalDate appointmentDate;
+	
+	@Length(max = 8,min = 8,message = "status Should be less than 50 Characters")
 	private String status;
 	private String remark;
 }

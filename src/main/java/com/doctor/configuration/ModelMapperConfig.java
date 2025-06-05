@@ -1,4 +1,4 @@
-package com.doctor.SecurityConfig;
+package com.doctor.configuration;
 
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
@@ -11,19 +11,16 @@ import com.doctor.dto.MiniPatientDTO;
 import com.doctor.dto.SimpleAppointmentDTO;
 import com.doctor.entity.Appointment;
 import com.doctor.entity.Feedback;
-import com.doctor.entity.Patient;
-
 
 @Configuration
-public class BeanConfigurations {
+public class ModelMapperConfig {
 
- 
 	@Bean
 	public ModelMapper getMapper() {
 		ModelMapper mapper=new ModelMapper();
 		
 		Converter<Appointment, SimpleAppointmentDTO> patientConverter= context->{
-			
+			if(context.getSource()!=null) {
 			Appointment source=context.getSource();
 			
 			SimpleAppointmentDTO destination=new SimpleAppointmentDTO();
@@ -40,12 +37,14 @@ public class BeanConfigurations {
 			
 			
 			return destination;
+			}
+			return null;
 					
 		};
 	
 		
 		Converter<Feedback, FeedbackDTO> feedbackConverter=context->{
-			
+			if(context.getSource()!=null) {
 			Feedback source=context.getSource();
 			FeedbackDTO destination=new FeedbackDTO();
 			
@@ -55,6 +54,8 @@ public class BeanConfigurations {
 			destination.setPatient(mapper.map(source.getPatient(), MiniPatientDTO.class));
 			
 			return destination;
+			}
+			return null;
 		};
 		
 		mapper.typeMap(Appointment.class, SimpleAppointmentDTO.class).setConverter(patientConverter);

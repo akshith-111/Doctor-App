@@ -9,7 +9,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import com.doctor.dto.AvailabilityDatesDTO;
 import com.doctor.dto.DoctorDTO;
 import com.doctor.entity.Appointment;
@@ -31,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DoctorServiceImpl implements IDoctorService {
 
-
+   
 	private final DoctorRepo doctorRepo;
 
 	
@@ -66,13 +65,12 @@ public class DoctorServiceImpl implements IDoctorService {
 	@Override
 	public DoctorDTO updateDoctor(DoctorModel doctorModel) {
 		Doctor doctor=mapper.map(doctorModel, Doctor.class);
-		
+		System.out.println("Entered");
 		Doctor actualDoctor =doctorRepo.findById(doctor.getDoctorId())
 				.orElseThrow(()->new ResourceNotFoundException("No Data Found on this Id: "+doctor.getDoctorId()));
 		doctor.setAppointments(actualDoctor.getAppointments());
 		doctor.setAvailabilityDates(actualDoctor.getAvailabilityDates());
 		doctor.setFeedback(actualDoctor.getFeedback());
-		System.out.println(doctor.getAppointments().get(0).getAppointmentId());
 		doctorRepo.save(doctor);
 		DoctorDTO doctorDTO=mapper.map(doctor,DoctorDTO.class);
 		return doctorDTO;
@@ -110,8 +108,9 @@ public class DoctorServiceImpl implements IDoctorService {
 
 		actualAvailabilityDates.setEndDate(availabilityDates.getEndDate());
 		actualAvailabilityDates.setFromDate(availabilityDates.getFromDate());
-		
+		System.out.println("entered");
 		availabilityDatesDTO=mapper.map(actualAvailabilityDates, AvailabilityDatesDTO.class);
+		System.out.println("exit");
 		return availabilityDatesDTO;
 	}
 
@@ -127,11 +126,11 @@ public class DoctorServiceImpl implements IDoctorService {
 
 	@Override
 	@Transactional
-	public DoctorDTO removeDoctor(DoctorModel doctorModel) {
-		Doctor doctor=mapper.map(doctorModel, Doctor.class);
+	public DoctorDTO removeDoctor(int id) {
 		
-		int id=doctor.getDoctorId();
-		doctor = doctorRepo.findById(id)
+		
+		
+		Doctor doctor = doctorRepo.findById(id)
 				.orElseThrow(()->new ResourceNotFoundException("No Data Found on this Id: "+id));
 
 		List<Appointment> appointments = doctor.getAppointments();

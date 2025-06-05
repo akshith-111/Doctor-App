@@ -21,6 +21,7 @@ import com.doctor.model.PatientModel;
 import com.doctor.service.IDoctorService;
 import com.doctor.service.IPatientService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -48,10 +49,10 @@ public class PatientController {
 		return ResponseEntity.ok(patientService.getPatient(id));
 	}
 	
-	@DeleteMapping("admin/removepatient")
-	public ResponseEntity<PatientDTO> deletePatient(@RequestBody PatientModel patientModel) {
+	@DeleteMapping("admin/removepatient/{id}")
+	public ResponseEntity<PatientDTO> deletePatient(@PathVariable int id){
 
-		return ResponseEntity.ok(patientService.removePatient(patientModel));
+		return ResponseEntity.ok(patientService.removePatient(id));
 	}
 
 	@GetMapping("admin/viewallpatients")
@@ -61,13 +62,13 @@ public class PatientController {
 	}
 
 	@PutMapping("admin/modifypatient")
-	public ResponseEntity<PatientDTO> modifyPatient(@RequestBody PatientModel patientModel) {
+	public ResponseEntity<PatientDTO> modifyPatient(@Valid @RequestBody PatientModel patientModel) {
 
 		return ResponseEntity.ok(patientService.updatePatient(patientModel));
 	}
 
 	@PostMapping("admin/addpatient")
-	public ResponseEntity<PatientDTO> addPatient(@RequestBody PatientModel patientModel) {
+	public ResponseEntity<PatientDTO> addPatient(@Valid @RequestBody PatientModel patientModel) {
 
 		return ResponseEntity.ok(patientService.savePatient(patientModel));
 	}

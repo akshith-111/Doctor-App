@@ -17,6 +17,8 @@ import com.doctor.service.IAdminService;
 import com.doctor.service.IDoctorService;
 import com.doctor.service.IPatientService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/signup")
 public class SignUpController {
@@ -31,18 +33,18 @@ public class SignUpController {
 	private IDoctorService doctorService;
 	
 	@PostMapping("/admin")
-	public ResponseEntity<AdminDTO> adminSignUp(@RequestBody Admin admin) {
+	public ResponseEntity<AdminDTO> adminSignUp(@Valid @RequestBody Admin admin) {
 		
 		return ResponseEntity.ok(adminService.saveAdmin(admin));
 	}
 	
 	@PostMapping("/patient")
-	public ResponseEntity<PatientDTO> patientSignUp(@RequestBody PatientModel patientModel) {
+	public ResponseEntity<PatientDTO> patientSignUp(@Valid @RequestBody PatientModel patientModel) {
 		return ResponseEntity.ok(patientService.savePatient(patientModel));
 	}
 	
 	@PostMapping("/doctor")
-	public ResponseEntity<DoctorDTO> doctorSignUp(@RequestBody DoctorModel doctorModel) {
+	public ResponseEntity<DoctorDTO> doctorSignUp(@Valid @RequestBody DoctorModel doctorModel) {
 		return ResponseEntity.ok(doctorService.saveDoctor(doctorModel));
 	}
 }
