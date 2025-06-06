@@ -2,11 +2,11 @@ package com.doctor.model;
 
 import java.time.LocalDate;
 
+
 import org.hibernate.validator.constraints.Length;
 import org.springframework.stereotype.Component;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

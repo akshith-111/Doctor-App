@@ -1,6 +1,7 @@
 package com.doctor.service;
 
 import java.util.List;
+
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
@@ -13,7 +14,6 @@ import com.doctor.dto.AdminDTO;
 import com.doctor.entity.Admin;
 import com.doctor.entity.User;
 import com.doctor.exceptionhandling.ResourceNotFoundException;
-import com.doctor.model.AdminModel;
 import com.doctor.repo.AdminRepo;
 import com.doctor.repo.UserRepo;
 

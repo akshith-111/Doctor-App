@@ -3,10 +3,10 @@ package com.doctor.service;
 
 import java.util.List;
 
+
 import org.springframework.stereotype.Service;
 
 import com.doctor.dto.FeedbackDTO;
-import com.doctor.entity.Feedback;
 import com.doctor.model.DoctorModel;
 import com.doctor.model.FeedbackModel;
 

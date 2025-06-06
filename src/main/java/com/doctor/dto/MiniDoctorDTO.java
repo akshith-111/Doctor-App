@@ -1,6 +1,5 @@
 package com.doctor.dto;
 
-import java.util.List;
 
 import org.springframework.stereotype.Component;
 

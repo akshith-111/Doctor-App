@@ -2,12 +2,12 @@ package com.doctor.service;
 
 import java.util.List;
 
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.doctor.dto.AvailabilityDatesDTO;
 import com.doctor.dto.DoctorDTO;
-import com.doctor.entity.Doctor;
 import com.doctor.model.DoctorModel;
 @Service
 public interface IDoctorService {

@@ -1,6 +1,7 @@
 package com.doctor.exceptionhandling;
 
 import lombok.Getter;
+
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 

@@ -5,14 +5,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.print.Doc;
-
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import com.doctor.controller.LoginController;
+
 import com.doctor.dto.AppointmentDTO;
 import com.doctor.entity.Appointment;
 import com.doctor.entity.Doctor;
@@ -22,7 +18,6 @@ import com.doctor.exceptionhandling.ResourceNotFoundException;
 import com.doctor.model.AppointmentModel;
 import com.doctor.model.DoctorModel;
 import com.doctor.model.PatientModel;
-import com.doctor.model.UserModel;
 import com.doctor.repo.AppointmentRepo;
 import com.doctor.repo.DoctorRepo;
 import com.doctor.repo.PatientRepo;
@@ -33,8 +28,6 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class AppointmentServiceImpl implements IAppointmentService {
 
-   
-  
 	private final AppointmentRepo appointmentRepo;
 
 	private final DoctorRepo doctorRepo;

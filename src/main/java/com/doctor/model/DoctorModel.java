@@ -2,6 +2,7 @@ package com.doctor.model;
 
 import java.util.List;
 
+
 import org.hibernate.validator.constraints.Length;
 import org.springframework.stereotype.Component;
 
@@ -9,8 +10,6 @@ import com.doctor.dto.AvailabilityDatesDTO;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

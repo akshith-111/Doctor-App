@@ -3,12 +3,8 @@ package com.doctor.model;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.stereotype.Component;
 
-import com.doctor.entity.Appointment;
-import com.doctor.entity.Feedback;
-
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

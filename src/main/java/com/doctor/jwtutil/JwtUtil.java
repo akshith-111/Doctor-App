@@ -1,12 +1,11 @@
 package com.doctor.jwtutil;
 
-import java.security.NoSuchAlgorithmException;
+
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -89,15 +88,6 @@ public class JwtUtil {
 				
 	}
 	
-//	public List<String> extractRoles(String token) {
-//	
-//		return Jwts.parser()
-//				.verifyWith(generateKey())
-//				.build()
-//				.parseSignedClaims(token)
-//				.getPayload()
-//				.get("roles", List.class);
-//	}
 	
 	
 }

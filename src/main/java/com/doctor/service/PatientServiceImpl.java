@@ -2,13 +2,13 @@ package com.doctor.service;
 
 import java.time.LocalDate;
 
+
 import java.util.List;
 import java.util.Map;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.doctor.DoctorAppApplication;
 import com.doctor.dto.PatientDTO;
 import com.doctor.entity.Appointment;
 import com.doctor.entity.Doctor;

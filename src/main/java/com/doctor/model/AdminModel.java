@@ -2,10 +2,10 @@ package com.doctor.model;
 
 
 import org.hibernate.validator.constraints.Length;
+
 import org.springframework.stereotype.Component;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
