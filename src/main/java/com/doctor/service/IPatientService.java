@@ -1,11 +1,14 @@
 package com.doctor.service;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.doctor.dto.MiniPatientDTO;
 import com.doctor.dto.PatientDTO;
 import com.doctor.entity.Patient;
 import com.doctor.model.DoctorModel;
@@ -29,5 +32,7 @@ public interface IPatientService {
 	public Patient getPatientListByDate(LocalDate appDate);
 	
 	public PatientDTO patchUpdatePatient(Map<String, Object> updates);
+
+	public List<MiniPatientDTO> getAllPatientsHistory(LocalDate date, String doctorName);
 
 }

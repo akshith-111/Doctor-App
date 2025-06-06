@@ -1,5 +1,6 @@
 package com.doctor.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -42,7 +43,7 @@ public class DoctorModel {
 	private String chargedPerVisit;
 	
 	@Valid
-	private List<AppointmentModel> appointments;
+	private List<AppointmentModel> appointments=new ArrayList<>();
 	
 	@Valid
 	private FeedbackModel feedback;

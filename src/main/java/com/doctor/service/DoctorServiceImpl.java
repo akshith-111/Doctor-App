@@ -151,6 +151,8 @@ public class DoctorServiceImpl implements IDoctorService {
 			});
 		}
 		
+		doctor.getPatients().stream().forEach(patient->patient.setDoctors(null));
+		
 		doctorRepo.delete(doctor);
 		userRepo.delete((User) userRepo.findByUsername(doctor.getEmail()));
 		

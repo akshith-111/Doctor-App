@@ -114,6 +114,14 @@ public class AppointmentServiceImpl implements IAppointmentService {
 		Appointment appointment=appointmentRepo.save(actualAppointment);
 		AppointmentDTO appointmentDTO= mapper.map(appointment, AppointmentDTO.class);
 		
+		if(appointmentDTO!=null&&appointment.getStatus().equals("ACCEPTED")) {
+			Doctor doctor=appointment.getDoctor();
+			Patient patient=appointment.getPatient();
+			doctor.getPatients().add(patient);
+			patient.getDoctors().add(doctor);
+			doctorRepo.save(doctor);
+			patientRepo.save(patient);
+		}
 		
 		return Optional.of(appointmentDTO);
 		}

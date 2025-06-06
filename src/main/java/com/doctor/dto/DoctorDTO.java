@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DoctorDTO {
 
-//	private int doctorId;
+
 	private String doctorName;
 	private String speciality;
 	private String hospitalName;

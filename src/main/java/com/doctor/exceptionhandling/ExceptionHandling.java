@@ -48,7 +48,7 @@ public class ExceptionHandling {
 
 	}
 
-	@ExceptionHandler(SQLIntegrityConstraintViolationException.class)
+	//@ExceptionHandler(SQLIntegrityConstraintViolationException.class)
 	public ResponseEntity<ErrorMessage> sqlIntegrityConstraintViolationExceptionHandler(Exception e) {
 
 		ErrorMessage errorMessage = new ErrorMessage("Duplicate Entry", "SQL_ERROR");

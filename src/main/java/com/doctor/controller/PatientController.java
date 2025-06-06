@@ -1,7 +1,7 @@
 package com.doctor.controller;
 
+import java.time.LocalDate;
 import java.util.List;
-
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.doctor.dto.DoctorDTO;
+import com.doctor.dto.MiniPatientDTO;
 import com.doctor.dto.PatientDTO;
 import com.doctor.model.PatientModel;
 import com.doctor.service.IDoctorService;
@@ -76,5 +78,12 @@ public class PatientController {
 	public ResponseEntity<PatientDTO> modifyPatient(@RequestBody Map<String, Object> updates) {
 
 		return ResponseEntity.ok(patientService.patchUpdatePatient(updates));
+	}
+	
+	
+	@GetMapping("/getpatientshistory")
+	public ResponseEntity<List<MiniPatientDTO>> getPatientsHistory(@RequestParam(required = false) LocalDate date,@RequestParam(required = false) String doctorName){
+		
+		return ResponseEntity.ok(patientService.getAllPatientsHistory(date,doctorName));
 	}
 }
