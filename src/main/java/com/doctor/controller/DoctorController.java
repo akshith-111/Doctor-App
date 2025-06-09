@@ -40,8 +40,7 @@ public class DoctorController {
 	
 	private final IAppointmentService appointmentService;
 	
-	private final IPatientService patientService;
-
+	
 	@PostMapping("/doctor/availabilitydates")
 	public ResponseEntity<AvailabilityDatesDTO> addAvalilabilityDates(
 			@Valid	@RequestBody AvailabilityDatesDTO availabilityDatesDTO) {
@@ -62,11 +61,7 @@ public class DoctorController {
 		return ResponseEntity.ok(appointmentService.getAppointments(doctorModel));
 	}
 
-	@GetMapping("doctor/patientsbydoctor")
-	public ResponseEntity<List<PatientDTO>> patientsByDoctor(@Valid @RequestBody DoctorModel doctorModel) {
-
-		return ResponseEntity.ok(patientService.getPatientListByDoctor(doctorModel));
-	}
+	
 	
 	@GetMapping("doctor/feedbacksbydoctor")
 	public ResponseEntity<List<FeedbackDTO>> feedbacksByDoctor(@Valid @RequestBody DoctorModel doctorModel) {
@@ -84,7 +79,7 @@ public class DoctorController {
 	}
 	
 
-	//Admin operations
+	//Admin's operations
 	@PostMapping("admin/adddoctor")
 	public ResponseEntity<DoctorDTO> addDoctor(@Valid @RequestBody DoctorModel doctorModel) {
 

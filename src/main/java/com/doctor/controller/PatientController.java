@@ -3,7 +3,11 @@ package com.doctor.controller;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.doctor.dto.DoctorDTO;
 import com.doctor.dto.MiniPatientDTO;
 import com.doctor.dto.PatientDTO;
+import com.doctor.model.DoctorModel;
 import com.doctor.model.PatientModel;
 import com.doctor.service.IDoctorService;
 import com.doctor.service.IPatientService;
@@ -61,6 +66,12 @@ public class PatientController {
 
 		return ResponseEntity.ok(patientService.getAllPatients());
 	}
+	
+	@GetMapping("doctor/patientsbydoctor")
+	public ResponseEntity<List<PatientDTO>> patientsByDoctor(@Valid @RequestBody DoctorModel doctorModel) {
+
+		return ResponseEntity.ok(patientService.getPatientListByDoctor(doctorModel));
+	}
 
 	@PutMapping("admin/modifypatient")
 	public ResponseEntity<PatientDTO> modifyPatient(@Valid @RequestBody PatientModel patientModel) {
@@ -83,7 +94,12 @@ public class PatientController {
 	
 	@GetMapping("/getpatientshistory")
 	public ResponseEntity<List<MiniPatientDTO>> getPatientsHistory(@RequestParam(required = false) LocalDate date,@RequestParam(required = false) String doctorName){
-		
-		return ResponseEntity.ok(patientService.getAllPatientsHistory(date,doctorName));
+			
+		Optional<List<MiniPatientDTO>> opt= patientService.getAllPatientsHistory(date,doctorName);
+		if(opt.isPresent())
+			return ResponseEntity.ok(opt.get());
+		else
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(List.of());
+		ResponseCookie cookie=ResponseCookie.from(doctorName);
 	}
 }

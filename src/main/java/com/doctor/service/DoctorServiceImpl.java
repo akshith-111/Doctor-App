@@ -110,7 +110,7 @@ public class DoctorServiceImpl implements IDoctorService {
 		actualAvailabilityDates.setFromDate(availabilityDates.getFromDate());
 		System.out.println("entered");
 		availabilityDatesDTO=mapper.map(actualAvailabilityDates, AvailabilityDatesDTO.class);
-		System.out.println("exit");
+		
 		return availabilityDatesDTO;
 	}
 
@@ -120,7 +120,7 @@ public class DoctorServiceImpl implements IDoctorService {
 		Doctor doctor = doctorRepo.findById(id)
 				.orElseThrow(()->new ResourceNotFoundException("No Data Found on this Id: "+id));
 		DoctorDTO doctorDTO=mapper.map(doctor, DoctorDTO.class);
-		//System.out.println(doctor.getFeedback().get(0));
+		
 		return new ResponseEntity<DoctorDTO>(doctorDTO,HttpStatus.OK);
 	}
 

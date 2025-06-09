@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,6 @@ public interface IPatientService {
 	
 	public PatientDTO patchUpdatePatient(Map<String, Object> updates);
 
-	public List<MiniPatientDTO> getAllPatientsHistory(LocalDate date, String doctorName);
+	public Optional<List<MiniPatientDTO>> getAllPatientsHistory(LocalDate date, String doctorName);
 
 }
