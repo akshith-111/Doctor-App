@@ -100,6 +100,6 @@ public class PatientController {
 			return ResponseEntity.ok(opt.get());
 		else
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(List.of());
-		ResponseCookie cookie=ResponseCookie.from(doctorName);
+		
 	}
 }

@@ -209,7 +209,10 @@ public class PatientServiceImpl implements IPatientService {
 			else {
 			patientList = patientRepo.findByDoctors(doctorList.get(0));
 			patientList = patientList.stream()
-					.filter(p -> p.getAppointment().getAppointmentDate().isBefore(date))
+					.filter(p ->{
+						LocalDate appDate=p.getAppointment().getAppointmentDate();
+						return (appDate.isBefore(date)||appDate.isEqual(date));	
+					})
 					.toList();
 			}
 		}
@@ -217,6 +220,7 @@ public class PatientServiceImpl implements IPatientService {
 		if(patientList.isEmpty()) {
 			return Optional.empty();
 		}
+		
 		List<MiniPatientDTO> dtoList = patientList.stream()
 				.map(patient -> mapper.map(patient, MiniPatientDTO.class)).toList();
 
