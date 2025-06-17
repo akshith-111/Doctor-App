@@ -1,19 +1,22 @@
 package com.doctor.service;
 
 import java.util.List;
-
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.doctor.dto.AdminDTO;
+import com.doctor.dto.DoctorDTO;
 import com.doctor.entity.Admin;
+import com.doctor.entity.Roles;
 import com.doctor.entity.User;
 import com.doctor.exceptionhandling.ResourceNotFoundException;
+import com.doctor.model.AdminModel;
 import com.doctor.repo.AdminRepo;
 import com.doctor.repo.UserRepo;
 
@@ -34,12 +37,31 @@ public class AdminServiceImpl implements IAdminService {
 
     
 	@Override
-	public AdminDTO saveAdmin(Admin admin) {
+	public AdminDTO saveAdmin(AdminModel adminModel) {
+		Admin admin=modelMapper.map(adminModel, Admin.class);
+		Optional<UserDetails> existingUser=userRepo.findByUsername(admin.getEmail());
+		
+		if(existingUser.isPresent()){
+			User user=(User)existingUser.get();
+			
+			
+			admin.setPassword(bCryptPasswordEncoder.encode(admin.getPassword()));
+			admin=adminRepo.save(admin);
+			AdminDTO adminDTO=modelMapper.map(admin, AdminDTO.class);
+			user.getRoles().add(new Roles("ROLE_ADMIN",user));
+			userRepo.save(user);
+			System.out.println(adminDTO);
+			return adminDTO;
+
+		}
+		
 		admin.setPassword(bCryptPasswordEncoder.encode(admin.getPassword()));
+		
+		
 		User user=new User();
 		admin=adminRepo.save(admin);
 		user.setPassword(admin.getPassword());
-		user.setRole("ADMIN");
+		user.getRoles().add(new Roles("ROLE_ADMIN",user));
 		user.setUsername(admin.getEmail());
 		userRepo.save(user);//saving user object
 		AdminDTO adminDTO=modelMapper.map(admin, AdminDTO.class);

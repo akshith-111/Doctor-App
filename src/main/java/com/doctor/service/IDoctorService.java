@@ -1,7 +1,7 @@
 package com.doctor.service;
 
 import java.util.List;
-
+import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ public interface IDoctorService {
 	public DoctorDTO updateDoctor(DoctorModel doctorModel);
 	public List<DoctorDTO> getDoctorList();
 	public AvailabilityDatesDTO addAvailability(AvailabilityDatesDTO availabilityDatesDTO);
-	public AvailabilityDatesDTO updateAvailability(AvailabilityDatesDTO availabilityDatesDTO);
+	public Optional<AvailabilityDatesDTO> updateAvailability(AvailabilityDatesDTO availabilityDatesDTO);
 //	public ResponseEntity<DoctorDTO> getDoctor(Doctor doctor);
 	public DoctorDTO removeDoctor(int id);
 	public List<DoctorDTO> getDoctorListBySpeciality(String speciality);

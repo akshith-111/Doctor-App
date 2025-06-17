@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.doctor.dto.AdminDTO;
 import com.doctor.dto.DoctorDTO;
 import com.doctor.dto.PatientDTO;
-import com.doctor.entity.Admin;
+import com.doctor.model.AdminModel;
 import com.doctor.model.DoctorModel;
 import com.doctor.model.PatientModel;
 import com.doctor.service.IAdminService;
@@ -33,9 +33,9 @@ public class SignUpController {
 	private IDoctorService doctorService;
 	
 	@PostMapping("/admin")
-	public ResponseEntity<AdminDTO> adminSignUp(@Valid @RequestBody Admin admin) {
+	public ResponseEntity<AdminDTO> adminSignUp(@Valid @RequestBody AdminModel adminModel) {
 		
-		return ResponseEntity.ok(adminService.saveAdmin(admin));
+		return ResponseEntity.ok(adminService.saveAdmin(adminModel));
 	}
 	
 	@PostMapping("/patient")

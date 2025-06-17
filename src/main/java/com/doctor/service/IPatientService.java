@@ -34,6 +34,6 @@ public interface IPatientService {
 	
 	public PatientDTO patchUpdatePatient(Map<String, Object> updates);
 
-	public Optional<List<MiniPatientDTO>> getAllPatientsHistory(LocalDate date, String doctorName);
+	//public Optional<List<MiniPatientDTO>> getAllPatientsHistory(LocalDate date, String doctorName);
 
 }

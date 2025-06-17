@@ -1,5 +1,6 @@
 package com.doctor.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import java.util.Map;
@@ -21,6 +22,8 @@ import com.doctor.dto.AvailabilityDatesDTO;
 import com.doctor.dto.DoctorDTO;
 import com.doctor.dto.FeedbackDTO;
 import com.doctor.dto.PatientDTO;
+import com.doctor.model.ApiResponse;
+import com.doctor.model.AuthModel;
 import com.doctor.model.DoctorModel;
 import com.doctor.service.IAppointmentService;
 import com.doctor.service.IDoctorService;
@@ -34,25 +37,28 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DoctorController {
 
-    private final IFeedbackService feedbackService;
-    
+	
+	private final IFeedbackService feedbackService;
+
 	private final IDoctorService doctorService;
-	
+
 	private final IAppointmentService appointmentService;
-	
-	
+
 	@PostMapping("/doctor/availabilitydates")
 	public ResponseEntity<AvailabilityDatesDTO> addAvalilabilityDates(
-			@Valid	@RequestBody AvailabilityDatesDTO availabilityDatesDTO) {
+			@Valid @RequestBody AvailabilityDatesDTO availabilityDatesDTO) {
 
 		return ResponseEntity.ok(doctorService.addAvailability(availabilityDatesDTO));
 	}
 
 	@PutMapping("doctor/updatedates")
-	public ResponseEntity<AvailabilityDatesDTO> updateAvaolabilityDates(
+	public ResponseEntity<?> updateAvailabilityDates(
 			@Valid @RequestBody AvailabilityDatesDTO availabilityDatesDTO) {
-
-		return ResponseEntity.ok(doctorService.updateAvailability(availabilityDatesDTO));
+		Optional<AvailabilityDatesDTO> opt= doctorService.updateAvailability(availabilityDatesDTO);
+		if(opt.isPresent())
+			return ResponseEntity.ok(opt.get());
+		else
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body( new ApiResponse("SUCCESS","Cannot Update Dates"));
 	}
 
 	@GetMapping("doctor/appointmentsbydoctor")
@@ -61,31 +67,30 @@ public class DoctorController {
 		return ResponseEntity.ok(appointmentService.getAppointments(doctorModel));
 	}
 
-	
-	
 	@GetMapping("doctor/feedbacksbydoctor")
 	public ResponseEntity<List<FeedbackDTO>> feedbacksByDoctor(@Valid @RequestBody DoctorModel doctorModel) {
 
 		return ResponseEntity.ok(feedbackService.getAllFeedbacks(doctorModel));
 	}
-	
+
 	@PatchMapping("doctor/updatestatus")
-	public ResponseEntity<AppointmentDTO> updateAppointment(@RequestBody Map<String, Object> updates) {
+	public ResponseEntity<?> updateAppointment(@RequestBody Map<String, Object> updates) {
 
 		Optional<AppointmentDTO> opt= appointmentService.updateAppointment(updates);
 		
-		return opt.map(ResponseEntity::ok)
-				.orElse(ResponseEntity.status(HttpStatus.FORBIDDEN).build());
+		if(opt.isPresent())
+			return ResponseEntity.ok(opt.get());
+		else
+		return ResponseEntity.ok(new ApiResponse("SUCCESS","NOT ALLOWED TO CHANGE STATUS"));
 	}
-	
 
-	//Admin's operations
+	// Admin's operations
 	@PostMapping("admin/adddoctor")
 	public ResponseEntity<DoctorDTO> addDoctor(@Valid @RequestBody DoctorModel doctorModel) {
 
 		return ResponseEntity.ok(doctorService.saveDoctor(doctorModel));
 	}
-	
+
 	@GetMapping("getdoctor/{id}")
 	public ResponseEntity<DoctorDTO> getDoctor(@PathVariable int id) {
 		return doctorService.getDoctor(id);
@@ -95,22 +100,17 @@ public class DoctorController {
 	public ResponseEntity<List<DoctorDTO>> getDoctors() {
 		return ResponseEntity.ok(doctorService.getDoctorList());
 	}
-	
+
 	@DeleteMapping("admin/removedoctor/{id}")
 	public ResponseEntity<DoctorDTO> deleteDoctor(@PathVariable int id) {
 
 		return ResponseEntity.ok(doctorService.removeDoctor(id));
 	}
-	
+
 	@PutMapping("admin/modifydoctor")
 	public ResponseEntity<DoctorDTO> modifyPatient(@Valid @RequestBody DoctorModel doctorModel) {
 
 		return ResponseEntity.ok(doctorService.updateDoctor(doctorModel));
 	}
-	
-	
-	
-	
-	
-	
+
 }

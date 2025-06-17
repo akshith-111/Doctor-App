@@ -1,7 +1,8 @@
 package com.doctor.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.doctor.dto.FeedbackDTO;
+import com.doctor.model.ApiResponse;
 import com.doctor.model.FeedbackModel;
 import com.doctor.service.IFeedbackService;
 
@@ -24,8 +26,14 @@ public class FeedbackController {
 	
 	
 	@PostMapping("/add")
-	public ResponseEntity<FeedbackDTO> addFeedback(@Valid @RequestBody FeedbackModel feedbackModel) {
-		return ResponseEntity.ok(feedbackservice.addFeedback(feedbackModel));
+	public ResponseEntity<?> addFeedback(@Valid @RequestBody FeedbackModel feedbackModel) {
+		
+		Optional<FeedbackDTO> opt=feedbackservice.addFeedback(feedbackModel);
+		
+		if(opt.isPresent())
+			return ResponseEntity.ok(opt.get());
+		
+		return ResponseEntity.ok(new ApiResponse("SUCCESS","CANNOT ADD FEEDBACK"));
 	}
 	
 	@GetMapping("/get/{id}")

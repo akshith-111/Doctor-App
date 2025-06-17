@@ -1,6 +1,7 @@
 package com.doctor.entity;
 
 import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,12 +11,13 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
@@ -43,6 +45,7 @@ public class Doctor implements Serializable {
 	private String speciality;
 	private String hospitalName;
 	private String mobileNo;
+	@Column(unique = true)
 	private String email;
 	private String password;
 	private String chargedPerVisit;
@@ -55,11 +58,9 @@ public class Doctor implements Serializable {
 	
 	@OneToOne(mappedBy = "doctor",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
 	private AvailabilityDates availabilityDates;
-	
-	@ManyToMany(mappedBy = "doctors")
-	private List<Patient> patients=new ArrayList<>();
 
-	
+	@OneToMany(mappedBy = "doctor",cascade = CascadeType.ALL)
+	private List<TreatmentHistory> treatmentHistory=new ArrayList<>();
 	
 
 }

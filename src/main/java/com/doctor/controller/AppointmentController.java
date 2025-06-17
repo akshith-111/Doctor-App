@@ -1,8 +1,8 @@
 package com.doctor.controller;
 
 import java.util.List;
-
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.doctor.dto.AppointmentDTO;
+import com.doctor.model.ApiResponse;
 import com.doctor.model.AppointmentModel;
 import com.doctor.model.PatientModel;
 import com.doctor.service.IAppointmentService;
@@ -71,12 +72,14 @@ public class AppointmentController {
 	
 
 	@PatchMapping("admin/updatestatus")
-	public ResponseEntity<AppointmentDTO> updateAppointment(@RequestBody Map<String, Object> updates) {
+	public ResponseEntity<?> updateAppointment(@RequestBody Map<String, Object> updates) {
 
 								
-		return appointmentService.updateAppointment(updates)
-				.map(ResponseEntity::ok)
-					.orElse(ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build());
+		Optional<AppointmentDTO> opt= appointmentService.updateAppointment(updates);
+		if(opt.isPresent())
+			return ResponseEntity.ok(opt.get());
+		else
+		return ResponseEntity.ok(new ApiResponse("SUCCESS","NOT ALLOWED TO CHANGE STATUS"));
 	}
 	
 	

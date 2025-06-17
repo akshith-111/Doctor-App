@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AdminModel {
 
-	private int adminId;
+	
 	@Length(max = 40,min = 4,message = "Contact Should be 10 Digits")
 	private String adminName;
 	

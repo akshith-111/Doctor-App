@@ -13,7 +13,7 @@ public interface PatientRepo extends JpaRepository<Patient, Integer>{
 
 	Optional<Patient> findByEmail(String username);
 	
-	List<Patient> findByDoctors(Doctor doctor);
+	//List<Patient> findByDoctors(Doctor doctor);
 	
 
 }

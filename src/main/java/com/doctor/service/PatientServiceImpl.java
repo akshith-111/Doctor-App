@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import com.doctor.entity.Appointment;
 import com.doctor.entity.Doctor;
 import com.doctor.entity.Feedback;
 import com.doctor.entity.Patient;
+import com.doctor.entity.Roles;
 import com.doctor.entity.User;
 import com.doctor.exceptionhandling.ResourceNotFoundException;
 import com.doctor.model.DoctorModel;
@@ -47,11 +49,25 @@ public class PatientServiceImpl implements IPatientService {
 	@Override
 	public PatientDTO savePatient(PatientModel patientModel) {
 		Patient patient = mapper.map(patientModel, Patient.class);
+		
+		Optional<UserDetails> existingUser=userRepo.findByUsername(patient.getEmail());
+		
+		if(existingUser.isPresent()){
+			User user=(User)existingUser.get();
+			
+			
+			patient.setPassword(bCryptPasswordEncoder.encode(patient.getPassword()));
+			patient=patientRepo.save(patient);
+			PatientDTO patientDTO=mapper.map(patient, PatientDTO.class);
+			user.getRoles().add(new Roles("ROLE_PATIENT",user));
+			userRepo.save(user);
+			return patientDTO;
 
+		}
 		patient.setPassword(bCryptPasswordEncoder.encode(patient.getPassword()));
 		User user = new User();
 		user.setPassword(patient.getPassword());
-		user.setRole("PATIENT");
+		user.getRoles().add(new Roles("ROLE_PATIENT",user));
 		user.setUsername(patient.getEmail());
 		userRepo.save(user);
 		patient = patientRepo.save(patient);
@@ -79,7 +95,7 @@ public class PatientServiceImpl implements IPatientService {
 		Patient patient = patientRepo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("No Data Found With id : " + id));
 		System.out.println(patient.getEmail());
-		userRepo.delete((User) userRepo.findByUsername(patient.getEmail()));
+		userRepo.delete((User)(userRepo.findByUsername(patient.getEmail()).get()));
 		patient.getAppointment();
 
 		Appointment appointment = patient.getAppointment();
@@ -175,56 +191,56 @@ public class PatientServiceImpl implements IPatientService {
 		return patientDto;
 	}
 
-	@Override
-	public Optional<List<MiniPatientDTO>> getAllPatientsHistory(LocalDate date, String doctorName) {
-		List<Patient> patientList = new ArrayList<>();
-				
-		if (date == null && doctorName == null) {
-			return Optional.empty();
-		}
-
-		if (doctorName == null) {
-			patientList = patientRepo.findAll().stream()
-					.filter(p ->{
-						LocalDate appDate=p.getAppointment().getAppointmentDate();
-						return (appDate.isBefore(date)||appDate.isEqual(date));	
-					})
-					.toList();
-		}
-
-		if (date == null) {
-			List<Doctor> doctorList=doctorRepo.findByDoctorName(doctorName);
-			if(doctorList.isEmpty()) {
-				return Optional.empty();
-			}else
-				
-			patientList = patientRepo.findByDoctors(doctorRepo.findByDoctorName(doctorName).get(0));
-			
-		}
-		if(date!=null&&doctorName!=null) {
-			List<Doctor> doctorList=doctorRepo.findByDoctorName(doctorName);
-			if(doctorList.isEmpty()) {
-				return Optional.empty();
-			}
-			else {
-			patientList = patientRepo.findByDoctors(doctorList.get(0));
-			patientList = patientList.stream()
-					.filter(p ->{
-						LocalDate appDate=p.getAppointment().getAppointmentDate();
-						return (appDate.isBefore(date)||appDate.isEqual(date));	
-					})
-					.toList();
-			}
-		}
-
-		if(patientList.isEmpty()) {
-			return Optional.empty();
-		}
-		
-		List<MiniPatientDTO> dtoList = patientList.stream()
-				.map(patient -> mapper.map(patient, MiniPatientDTO.class)).toList();
-
-		return Optional.of(dtoList);
-	}
+	//@Override
+//	public Optional<List<MiniPatientDTO>> getAllPatientsHistory(LocalDate date, String doctorName) {
+//		List<Patient> patientList = new ArrayList<>();
+//				
+//		if (date == null && doctorName == null) {
+//			return Optional.empty();
+//		}
+//
+//		if (doctorName == null) {
+//			patientList = patientRepo.findAll().stream()
+//					.filter(p ->{
+//						LocalDate appDate=p.getAppointment().getAppointmentDate();
+//						return (appDate.isBefore(date)||appDate.isEqual(date));	
+//					})
+//					.toList();
+//		}
+//
+//		if (date == null) {
+//			List<Doctor> doctorList=doctorRepo.findByDoctorName(doctorName);
+//			if(doctorList.isEmpty()) {
+//				return Optional.empty();
+//			}else
+//				
+//			patientList = patientRepo.findByDoctors(doctorRepo.findByDoctorName(doctorName).get(0));
+//			
+//		}
+//		if(date!=null&&doctorName!=null) {
+//			List<Doctor> doctorList=doctorRepo.findByDoctorName(doctorName);
+//			if(doctorList.isEmpty()) {
+//				return Optional.empty();
+//			}
+//			else {
+//			patientList = patientRepo.findByDoctors(doctorList.get(0));
+//			patientList = patientList.stream()
+//					.filter(p ->{
+//						LocalDate appDate=p.getAppointment().getAppointmentDate();
+//						return (appDate.isBefore(date)||appDate.isEqual(date));	
+//					})
+//					.toList();
+//			}
+//		}
+//
+//		if(patientList.isEmpty()) {
+//			return Optional.empty();
+//		}
+//		
+//		List<MiniPatientDTO> dtoList = patientList.stream()
+//				.map(patient -> mapper.map(patient, MiniPatientDTO.class)).toList();
+//
+//		return Optional.of(dtoList);
+//	}
 
 }

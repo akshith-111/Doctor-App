@@ -16,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -46,13 +47,9 @@ public class Patient {
 	
 	@OneToOne(mappedBy = "patient",fetch = FetchType.EAGER,cascade = CascadeType.ALL,orphanRemoval = true)
 	private Feedback feedback;
+
 	
-	@ManyToMany
-	@JoinTable(name = "doctors_patients",
-	joinColumns = @JoinColumn(name="patient_id"),
-	inverseJoinColumns = @JoinColumn(name="doctor_id"))
-	private List<Doctor> doctors=new ArrayList<>();
-	
-	
+	@OneToMany(mappedBy = "patient",cascade = CascadeType.ALL)
+	private List<TreatmentHistory> treatmentHistory=new ArrayList<>();
 	
 }

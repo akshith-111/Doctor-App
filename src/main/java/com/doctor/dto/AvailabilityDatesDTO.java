@@ -1,6 +1,6 @@
 package com.doctor.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import org.springframework.stereotype.Component;
 
@@ -16,6 +16,6 @@ public class AvailabilityDatesDTO {
 
 	private int doctorId;
 	private int availabilityId;
-	private Date fromDate;
-	private Date endDate;
+	private LocalDate fromDate;
+	private LocalDate endDate;
 }
